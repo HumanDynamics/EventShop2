@@ -9,7 +9,6 @@ public class EmageParams {
 	private final int timeWindow;
 	
 	/*
-	 * @Author pmarx
 	 * Basic setup just so it compiles
 	 */ 
 	public EmageParams(
@@ -19,5 +18,10 @@ public class EmageParams {
 		//TODO this should be enforceably unique amongst all Emage UID's
 		this.uid = uid;
 		this.timeWindow = timeWindow;
+	}
+	
+	//TODO: need to decide how this will actually look
+	public void setTimeWindow(int start, int end) {
+		
 	}
 }

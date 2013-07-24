@@ -9,11 +9,16 @@ public abstract class AbstractDataWrapper {
 	public AbstractDataWrapper(
 			EmageParams emageParams,
 			WrapperParams wrapperParams,
-			AuthFields authFields ) {
+			AuthFields authFields  ) {
 		this.emageParams = emageParams;
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
 	}
 
+	/**
+	 * Tells a datasource to get more data, process it into a unified stream of STTPoints 
+	 * and return it
+	 * @return PointStream of the processed datasource
+	 */
 	abstract PointStream getWrappedData();
 }
