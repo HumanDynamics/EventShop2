@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class AbstractDataWrapper {
 	
 	private final WrapperParams wrapperParams;
-	private final String[] authFields;
+	private final AuthFields authFields;
 	private final int wrapperUID;
 	
 	private static int uidCounter = 0;
@@ -13,7 +13,7 @@ public abstract class AbstractDataWrapper {
 	
 	public AbstractDataWrapper(
 			WrapperParams wrapperParams,
-			String[] authFields) {
+			AuthFields authFields) {
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
 		this.wrapperUID = uidCounter++;
