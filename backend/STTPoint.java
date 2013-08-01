@@ -6,23 +6,22 @@ package backend;
  */
 
 public class STTPoint {
-	private int uid;
+	private static long uidCounter = 0;
 	
 	//TODO: will we know these coordinates upon STTPoint creation?
 	private double latitude;
 	private double longitude;
-	//TODO: How to we make theme stronger enforced than a string? needs to be fixed
-	private String theme;
 	private double value;
+	private WrapperParams wrapperParams;
+	private final long uid;
 	
 	/**
 	 * @param uid
 	 * @param theme
 	 * @param value
 	 */
-	public STTPoint(int uid, String theme, double value, double latitude, double longitude) {
-		this.uid = uid;
-		this.theme = theme;
+	public STTPoint(double value, double latitude, double longitude, WrapperParams wrapperParams) {
+		this.uid = uidCounter++;
 		this.value = value;
 		this.latitude = latitude;
 		this.longitude = longitude;

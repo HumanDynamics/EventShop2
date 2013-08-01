@@ -4,12 +4,11 @@ import java.util.ArrayList;
 
 public abstract class AbstractDataWrapper {
 	
-	private int wrapperId;
 	private final WrapperParams wrapperParams;
 	private final AuthFields authFields;
 	private final int wrapperUID;
 	
-	private static int idCount = 0;
+	private static int uidCounter = 0;
 	
 	
 	public AbstractDataWrapper(
@@ -17,13 +16,15 @@ public abstract class AbstractDataWrapper {
 			AuthFields authFields ) {
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
-		this.wrapperUID = idCount++;
+		this.wrapperUID = uidCounter++;
 
 	}
 
 	/**
 	 * Tells a datasource to get more data, process it into a unified stream of STTPoints 
 	 * and return it
+	 * TODO: dont quite have my finger on why but should this return return STTPoints or just
+	 * the actual data
 	 * @return PointStream of the processed datasource
 	 */
 	public abstract ArrayList<STTPoint> getWrappedData();
