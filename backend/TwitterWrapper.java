@@ -1,24 +1,26 @@
 package backend;
 
-public class TwitterWrapper extends AbstractDataWrapper {
+import java.util.ArrayList;
+
+public class TwitterWrapper extends AbstractGeoWrapper {
 
 	/**
 	 * @param emageParams
 	 * @param wrapperParams
 	 * @param authFields
 	 */
-	public TwitterWrapper(
-			EmageParams emageParams, 
-			WrapperParams wrapperParams,
-			AuthFields authFields
-			) {
-		super(emageParams, wrapperParams, authFields);
-		// TODO Auto-generated constructor stub
-		// TODO Add support for TwitterParams
+	public TwitterWrapper( WrapperParams wrapperParams,
+			AuthFields authFields,int geoResolution,
+			double geoBoundingBoxSouthWest, 
+			double geoBoundingBoxNorthEast,
+			String source, String theme) {
+		super( wrapperParams, authFields, geoResolution, geoBoundingBoxNorthEast, geoBoundingBoxNorthEast, source, theme);
+		// TODO add suport for CSV params
 	}
 
 	@Override
-	PointStream getWrappedData() {
+	public
+	ArrayList<STTPoint> getWrappedData() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,31 +2,50 @@ package backend;
 
 public class Emage {
 
-	//TODO: is there a better datastructure for this? 
-	STTPoint[][] valueGrid;
-	/*
-	 * TODO: I think we need more params here but I'm not sure how to store them...
-	 * Maybe we should just pass the instance of WrapperParams and EmageParams to the Emage itself?
-	 * will that be a probably when building an emage from the DB though?
-	 */
+	private double[][] valueGrid;
+	private final long emageUID;
+	private double timeWindow;
+	private double geoBoundNE;
+	private double geoBoundSW;
+	private int geoResolution;
+	private String source;
+	private String theme;
+	private AuthFields authFields;
+	
+	//TODO: should we worry about overflow here?
+	private static long emageUIDCount = 0; 
+	
 	
 	/**
 	 * @param valueGrid
+	 * @param emageUID
+	 * @param timeWindow
+	 * @param geoBoundNE
+	 * @param geoBoundSW
+	 * @param geoResolution
+	 * @param source
+	 * @param theme
+	 * @param authFields
 	 */
-	public Emage(STTPoint[][] valueGrid) {
+	public Emage(double[][] valueGrid, double timeWindow,
+			double geoBoundNE, double geoBoundSW, int geoResolution,
+			String source, String theme, AuthFields authFields) {
 		this.valueGrid = valueGrid;
-	}
-	
-	public EmageParams getEmageParams(){
-		return null;
+		this.timeWindow = timeWindow;
+		this.geoBoundNE = geoBoundNE;
+		this.geoBoundSW = geoBoundSW;
+		this.geoResolution = geoResolution;
+		this.source = source;
+		this.theme = theme;
+		this.authFields = authFields;
+		this.emageUID = emageUIDCount++;
 	}
 	
 	public STTPoint getPoint(int xcoord, int ycoord) {
 		return null;
 	}
 	
-	//TODO: Should value be a double?
-	public void setPoint(int xcoord, int ycoord, int value) {
+	public void setPoint(int xcoord, int ycoord, double value) {
 
 	}
 	

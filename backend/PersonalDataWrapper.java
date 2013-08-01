@@ -1,5 +1,7 @@
 package backend;
 
+import java.util.ArrayList;
+
 
 public class PersonalDataWrapper extends AbstractDataWrapper {
 	
@@ -9,16 +11,18 @@ public class PersonalDataWrapper extends AbstractDataWrapper {
 	 * @param authFields
 	 */
 	public PersonalDataWrapper(
-			EmageParams emageParams,
 			WrapperParams wrapperParams, 
-			AuthFields authFields ) {
-		super(emageParams, wrapperParams, authFields);
+			AuthFields authFields,
+			String source,
+			String theme) {
+		super(wrapperParams, authFields, source, theme);
 		// TODO Auto-generated constructor stub
 		// TODO add uid
 	}
 
 	@Override
-	PointStream getWrappedData() {
+	public
+	ArrayList<STTPoint> getWrappedData() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,24 +1,30 @@
 package backend;
 
-public class CSVWrapper extends AbstractDataWrapper {
+import java.util.ArrayList;
 
-	/**
-	 * @param emageParams
-	 * @param wrapperParams
-	 * @param authFields
-	 */
-	public CSVWrapper(EmageParams emageParams, 
-			WrapperParams wrapperParams,
-			AuthFields authFields ) {
-		super(emageParams, wrapperParams, authFields);
-		// TODO Auto-generated constructor stub
-		// TODO add suport for CSV params
-	}
-
+public class CSVWrapper extends AbstractGeoWrapper {
 	@Override
-	PointStream getWrappedData() {
+	public
+	ArrayList<STTPoint> getWrappedData() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * @param wrapperParams
+	 * @param authFields
+	 * @param geoResolution
+	 * @param geoBoundingBoxSouthWest
+	 * @param geoBoundingBoxNorthEast
+	 * @param source
+	 * @param theme
+	 */
+	public CSVWrapper(WrapperParams wrapperParams, AuthFields authFields,
+			int geoResolution, double geoBoundingBoxSouthWest,
+			double geoBoundingBoxNorthEast, String source, String theme) {
+		super(wrapperParams, authFields, geoResolution, geoBoundingBoxSouthWest,
+				geoBoundingBoxNorthEast, source, theme);
+		// TODO Auto-generated constructor stub
 	}
 
 }
