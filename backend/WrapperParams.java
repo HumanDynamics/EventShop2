@@ -1,10 +1,6 @@
 package backend;
 
 public class WrapperParams {
-	private final int geoResolution;
-	
-	//TODO: fill this in correctly
-	//private final GeoPoint geoPoint;
 	
 	private final String source;
 	
@@ -17,11 +13,9 @@ public class WrapperParams {
 	 * Basic setup just so it compiles
 	 */ 
 	public WrapperParams(
-			int geoResolution,
 			String source,
 			String theme
 			) {
-		this.geoResolution = geoResolution;
 		this.source = source;
 		this.theme = theme;
 	}

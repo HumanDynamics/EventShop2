@@ -7,8 +7,6 @@ public abstract class AbstractDataWrapper {
 	private int wrapperId;
 	private final WrapperParams wrapperParams;
 	private final AuthFields authFields;
-	private final String source;
-	private final String theme;
 	private final int wrapperUID;
 	
 	private static int idCount = 0;
@@ -16,13 +14,9 @@ public abstract class AbstractDataWrapper {
 	
 	public AbstractDataWrapper(
 			WrapperParams wrapperParams,
-			AuthFields authFields,
-			String source,
-			String theme ) {
+			AuthFields authFields ) {
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
-		this.source = source;
-		this.theme = theme;
 		this.wrapperUID = idCount++;
 
 	}

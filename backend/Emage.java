@@ -5,11 +5,8 @@ public class Emage {
 	private double[][] valueGrid;
 	private final long emageUID;
 	private final double timeWindow;
-	private final double geoBoundNE;
-	private final double geoBoundSW;
-	private final int geoResolution;
-	private final String source;
-	private final String theme;
+	private final WrapperParams wrapperParams;
+	private final GeoParams geoParams;
 	private AuthFields authFields;
 	
 	//TODO: should we worry about overflow here?
@@ -18,25 +15,18 @@ public class Emage {
 	
 	/**
 	 * @param valueGrid
-	 * @param emageUID
 	 * @param timeWindow
-	 * @param geoBoundNE
-	 * @param geoBoundSW
-	 * @param geoResolution
-	 * @param source
-	 * @param theme
 	 * @param authFields
+	 * @param wrapperParams TODO
+	 * @param geoParams TODO
+	 * @param emageUID
 	 */
 	public Emage(double[][] valueGrid, double timeWindow,
-			double geoBoundNE, double geoBoundSW, int geoResolution,
-			String source, String theme, AuthFields authFields) {
+			AuthFields authFields, WrapperParams wrapperParams, GeoParams geoParams) {
 		this.valueGrid = valueGrid;
 		this.timeWindow = timeWindow;
-		this.geoBoundNE = geoBoundNE;
-		this.geoBoundSW = geoBoundSW;
-		this.geoResolution = geoResolution;
-		this.source = source;
-		this.theme = theme;
+		this.wrapperParams = wrapperParams;
+		this.geoParams = geoParams;
 		this.authFields = authFields;
 		this.emageUID = emageUIDCount++;
 	}

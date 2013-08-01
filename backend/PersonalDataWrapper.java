@@ -15,7 +15,7 @@ public class PersonalDataWrapper extends AbstractDataWrapper {
 			AuthFields authFields,
 			String source,
 			String theme) {
-		super(wrapperParams, authFields, source, theme);
+		super(wrapperParams, authFields);
 		// TODO Auto-generated constructor stub
 		// TODO add uid
 	}
