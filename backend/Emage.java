@@ -4,12 +4,12 @@ public class Emage {
 
 	private double[][] valueGrid;
 	private final long emageUID;
-	private double timeWindow;
-	private double geoBoundNE;
-	private double geoBoundSW;
-	private int geoResolution;
-	private String source;
-	private String theme;
+	private final double timeWindow;
+	private final double geoBoundNE;
+	private final double geoBoundSW;
+	private final int geoResolution;
+	private final String source;
+	private final String theme;
 	private AuthFields authFields;
 	
 	//TODO: should we worry about overflow here?
@@ -45,11 +45,7 @@ public class Emage {
 		return null;
 	}
 	
-	public void setPoint(int xcoord, int ycoord, double value) {
-
-	}
-	
-	public STTPoint[][] getValueGrid() {
+	public double[][] getValueGrid() {
 		return null;
 	}
 }
