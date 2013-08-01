@@ -12,7 +12,7 @@ public class TwitterWrapper extends AbstractDataWrapper {
 	public TwitterWrapper(
 			EmageParams emageParams, 
 			WrapperParams wrapperParams,
-			String[] authfields
+			AuthFields authFields
 			) {
 		super(emageParams, wrapperParams, authFields);
 		
@@ -24,14 +24,14 @@ public class TwitterWrapper extends AbstractDataWrapper {
         //query.track(keywords);
         //query.locations(locations);
         TwitterStream twitterStream= new TwitterStreamFactory().getInstance();
-        twitterStream.setOAuthConsumer(authFields[0],authFields[1]);
+        twitterStream.setOAuthAccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret());
         
-        twitterStream.setOAuthConsumer(authFields[2],authFields[3]);
+        twitterStream.setOAuthConsumer(authFields.getConsumerKey(),authFields.getConsumerKeySecret());
         
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
             }
 
             @Override
