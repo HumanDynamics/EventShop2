@@ -20,9 +20,8 @@ public class CSVWrapper extends AbstractGeoWrapper {
 	 * @param theme
 	 */
 	public CSVWrapper(WrapperParams wrapperParams, AuthFields authFields,
-			int geoResolution, double geoBoundingBoxSouthWest,
-			double geoBoundingBoxNorthEast) {
-		super(wrapperParams, authFields, null);
+			GeoParams geoParams) {
+		super(wrapperParams, authFields, geoParams);
 		// TODO Auto-generated constructor stub
 	}
 

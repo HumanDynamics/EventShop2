@@ -10,10 +10,8 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	 * @param authFields
 	 */
 	public TwitterWrapper( WrapperParams wrapperParams,
-			AuthFields authFields, int geoResolution,
-			double geoBoundingBoxSouthWest, 
-			double geoBoundingBoxNorthEast ) {
-		super( wrapperParams, authFields, null);
+			AuthFields authFields, GeoParams geoParams) {
+		super( wrapperParams, authFields, geoParams);
 		// TODO add suport for CSV params
 	}
 

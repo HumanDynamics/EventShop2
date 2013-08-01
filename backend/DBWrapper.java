@@ -3,9 +3,8 @@ package backend;
 public class DBWrapper extends AbstractGeoWrapper {
 
 	public DBWrapper(WrapperParams wrapperParams, AuthFields authFields,
-			int geoResolution, double geoBoundingBoxSouthWest,
-			double geoBoundingBoxNorthEast) {
-		super(wrapperParams, authFields, null);
+			GeoParams geoParams) {
+		super(wrapperParams, authFields, geoParams);
 		// TODO Auto-generated constructor stub
 	}
 

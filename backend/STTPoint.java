@@ -8,7 +8,6 @@ package backend;
 public class STTPoint {
 	private static long uidCounter = 0;
 	
-	//TODO: will we know these coordinates upon STTPoint creation?
 	private double latitude;
 	private double longitude;
 	private double value;
@@ -25,5 +24,6 @@ public class STTPoint {
 		this.value = value;
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.wrapperParams = wrapperParams;
 	}
 }

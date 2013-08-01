@@ -9,6 +9,10 @@ public class PointStream {
 	//TODO: should this be a timestamp?
 	private double pollingTimeMS;
 	private Iterator<STTPoint> pointIterator;
+	private double emagePollingTimeMS;
+	
+	//TODO: should this be a timestamp?
+	private double lastEmageCreationTime;
 	
 	public PointStream(AbstractDataWrapper wrapperReference) {
 		this.wrapperReference = wrapperReference;

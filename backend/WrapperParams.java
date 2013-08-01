@@ -4,8 +4,7 @@ public class WrapperParams {
 	
 	private final String source;
 	
-	//TODO(pmarx): Can we make theme an Enum or something similar based off a database list of
-	//all the registered datasources we have?
+	//TODO(pmarx): How do we use theme and should it be just a string?
 	private final String theme;
 	
 	/*
