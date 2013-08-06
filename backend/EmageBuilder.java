@@ -30,22 +30,10 @@ public class EmageBuilder {
 		GeoParams geoParams = pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
-		double[][] valueGrid = createEmptyValueGrid(geoParams);
-		if (operator.equals(Operator.MAX)) {
-			for (int i=0; i<valueGrid.length; i++) {
-				Arrays.fill(valueGrid[i], Integer.MIN_VALUE);
-			}
-		}
-		if (operator.equals(Operator.MIN)) {
-			for (int i=0; i<valueGrid.length; i++) {
-				Arrays.fill(valueGrid[i], Integer.MAX_VALUE);
-			}
-		}
-		
-		
+		double[][] valueGrid = createEmptyValueGrid(geoParams, operator);
 		
 		//For holding the counts so we can compute the avg of each cell
-		double[][] avgAssistGrid = createEmptyValueGrid(geoParams);
+		double[][] avgAssistGrid = createEmptyValueGrid(geoParams, Operator.AVG);
 		
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
@@ -79,14 +67,26 @@ public class EmageBuilder {
 	/*
 	 * Assumes well formed bounding box, takes the absolute value of the differences.
 	 */
-	private double[][] createEmptyValueGrid(GeoParams geoParams) {
+	private double[][] createEmptyValueGrid(GeoParams geoParams, Operator operator) {
 		double delta_x = Math.abs(geoParams.geoBoundNW.latitude - geoParams.geoBoundSE.latitude);
 		double delta_y = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
 		
 		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
 		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
 		
-		return new double[x_width][y_width];
+		double[][] valueGrid = new double[x_width][y_width];
+		
+		if (operator.equals(Operator.MAX)) {
+			for (int i=0; i<x_width; i++) {
+				Arrays.fill(valueGrid[i], Integer.MIN_VALUE);
+			}
+		}
+		if (operator.equals(Operator.MIN)) {
+			for (int i=0; i<x_width; i++) {
+				Arrays.fill(valueGrid[i], Integer.MAX_VALUE);
+			}
+		}
+		return valueGrid;
 	}
 	
 	/*
