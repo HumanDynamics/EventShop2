@@ -21,7 +21,6 @@ public class PointStream {
 	private double emagePollingTimeMS;
 	private ArrayList<STTPoint> emagePointQueue;
 	
-	//TODO: should this be a timestamp?
 	private Timestamp lastEmageCreationTime;
 	
 	public PointStream(AbstractDataWrapper wrapperReference) {

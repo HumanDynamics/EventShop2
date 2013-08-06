@@ -4,6 +4,12 @@ import java.util.Iterator;
 import java.util.Arrays;
 
 public class EmageBuilder {
+	
+	private PointStream pointStream;
+	
+	public EmageBuilder(PointStream pointStream) {
+		this.pointStream = pointStream;
+	}
 		
 	/**
 	 * Enum class for specifiying which type of aggregation happens in the EmageBuilder
@@ -19,15 +25,12 @@ public class EmageBuilder {
 	}
 	
 	/*
-	 * TODO: Takes a pointstream (and possibly a timewindow or some limiting factor) and
-	 * returns an emage worthy of forwarding and adding to the DB
-	 * 
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	
-	public Emage buildEmage(PointStream pointStream, double timeWindow, Operator operator) throws Exception {
-		Iterator<STTPoint> pointIterator = pointStream.getPointsForEmage(true);
-		GeoParams geoParams = pointStream.getGeoParams();
+	public Emage buildEmage(double timeWindow, Operator operator) throws Exception {
+		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
+		GeoParams geoParams = this.pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
 		double[][] valueGrid = createEmptyValueGrid(geoParams, operator);
@@ -60,8 +63,8 @@ public class EmageBuilder {
 				break;
 			}
 		}
-		return new Emage(valueGrid, timeWindow, pointStream.getAuthFields(), 
-				pointStream.getWrapperParams(), geoParams);
+		return new Emage(valueGrid, timeWindow, this.pointStream.getAuthFields(), 
+				this.pointStream.getWrapperParams(), geoParams);
 	}
 	
 	/*
