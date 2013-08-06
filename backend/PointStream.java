@@ -1,5 +1,6 @@
 package backend;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -21,7 +22,7 @@ public class PointStream {
 	private ArrayList<STTPoint> emagePointQueue;
 	
 	//TODO: should this be a timestamp?
-	private double lastEmageCreationTime;
+	private Timestamp lastEmageCreationTime;
 	
 	public PointStream(AbstractDataWrapper wrapperReference) {
 		this.wrapperReference = wrapperReference;

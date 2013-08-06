@@ -7,8 +7,6 @@ public class TwitterWrapper extends AbstractDataWrapper {
 	 * @param wrapperParams
 	 * @param authFields
 	 */
-    private
-    
 	public TwitterWrapper(
 			EmageParams emageParams, 
 			WrapperParams wrapperParams,
