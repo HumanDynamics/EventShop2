@@ -1,5 +1,7 @@
 package backend;
 
+import java.sql.Timestamp;
+
 public class STTPoint {
 	private static long uidCounter = 0;
 	

@@ -104,7 +104,14 @@ public class EmageBuilder {
 		 * TODO: possbily thats not the case (what if it's outside the bounding box???) maybe in that
 		 * case we should just throw it out?
 		 */
-		double delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+		double delta_x;
+		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude && 
+				geoParams.geoBoundNW.longitude > sttPoint.getLatLong().longitude) {
+			//Our point is wrapped around 180/-180
+			delta_x =  (180 - geoParams.geoBoundNW.longitude) + (180 + sttPoint.getLatLong().longitude);
+		} else {
+			delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+		}
 		return (int) Math.round(delta_x/geoParams.geoResolutionX);
 	}
 	
