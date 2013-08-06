@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.Iterator;
+import java.util.Arrays;
 
 public class EmageBuilder {
 		
@@ -28,7 +29,20 @@ public class EmageBuilder {
 		Iterator<STTPoint> pointIterator = pointStream.getPointsForEmage(true);
 		GeoParams geoParams = pointStream.getGeoParams();
 		
+		//Initialize grid to correct values
 		double[][] valueGrid = createEmptyValueGrid(geoParams);
+		if (operator.equals(Operator.MAX)) {
+			for (int i=0; i<valueGrid.length; i++) {
+				Arrays.fill(valueGrid[i], Integer.MIN_VALUE);
+			}
+		}
+		if (operator.equals(Operator.MIN)) {
+			for (int i=0; i<valueGrid.length; i++) {
+				Arrays.fill(valueGrid[i], Integer.MAX_VALUE);
+			}
+		}
+		
+		
 		
 		//For holding the counts so we can compute the avg of each cell
 		double[][] avgAssistGrid = createEmptyValueGrid(geoParams);
@@ -40,11 +54,9 @@ public class EmageBuilder {
 			
 			switch (operator) {
 			case MAX:
-				//TODO: what should we do here if no value is greater than 0, since java initializes to that
 				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
 				break;
 			case MIN:
-				//TODO: what should we do here if no value is less than 0, since java initializes to that
 				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
 				break;
 			case SUM:
