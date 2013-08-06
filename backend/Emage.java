@@ -17,8 +17,8 @@ public class Emage {
 	 * @param valueGrid
 	 * @param timeWindow
 	 * @param authFields
-	 * @param wrapperParams TODO
-	 * @param geoParams TODO
+	 * @param wrapperParams
+	 * @param geoParams
 	 * @param emageUID
 	 */
 	public Emage(double[][] valueGrid, double timeWindow,
@@ -31,11 +31,7 @@ public class Emage {
 		this.emageUID = emageUIDCount++;
 	}
 	
-	public STTPoint getPoint(int xcoord, int ycoord) {
-		return null;
-	}
-	
 	public double[][] getValueGrid() {
-		return null;
+		return this.valueGrid;
 	}
 }

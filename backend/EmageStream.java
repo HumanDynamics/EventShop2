@@ -1,5 +1,11 @@
 package backend;
 
+/*
+ * TODO: Emage stream should have two submethods, one to get the points from Point Stream,
+ * One to get call Emagebuilder to build the emage from those points at the correct time
+ */
+
+
 public class EmageStream {
 	private EmageBuilder emageBuilder;
 	

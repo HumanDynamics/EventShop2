@@ -22,7 +22,6 @@ public class CSVWrapper extends AbstractGeoWrapper {
 	public CSVWrapper(WrapperParams wrapperParams, AuthFields authFields,
 			GeoParams geoParams) {
 		super(wrapperParams, authFields, geoParams);
-		// TODO Auto-generated constructor stub
 	}
 
 }

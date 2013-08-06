@@ -17,14 +17,11 @@ public abstract class AbstractDataWrapper {
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
 		this.wrapperUID = uidCounter++;
-
 	}
 
 	/**
 	 * Tells a datasource to get more data, process it into a unified stream of STTPoints 
 	 * and return it
-	 * TODO: dont quite have my finger on why but should this return return STTPoints or just
-	 * the actual data
 	 * @return PointStream of the processed datasource
 	 */
 	public abstract ArrayList<STTPoint> getWrappedData();
