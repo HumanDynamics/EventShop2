@@ -72,7 +72,13 @@ public class EmageBuilder {
 	 */
 	private double[][] createEmptyValueGrid(GeoParams geoParams, Operator operator) {
 		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - geoParams.geoBoundSE.latitude);
-		double delta_x = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
+		double delta_x;
+		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude) {
+			//We've wrapped around from 180 to -180,
+			delta_x = 360-geoParams.geoBoundNW.longitude+geoParams.geoBoundSE.longitude;
+		} else {
+			delta_x = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
+		}
 		
 		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
 		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
@@ -91,10 +97,7 @@ public class EmageBuilder {
 		}
 		return valueGrid;
 	}
-	
-	/*
-	 * TODO: This is definitely going to need some stronger error handling, for example near latitude 180 or 360 or whatever
-	 */
+
 	private int getXIndex(GeoParams geoParams, STTPoint sttPoint) {
 		/*
 		 *  assuming that since it's the top left corner, this will always be distance out from there
