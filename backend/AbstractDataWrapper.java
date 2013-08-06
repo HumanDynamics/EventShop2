@@ -13,7 +13,7 @@ public abstract class AbstractDataWrapper {
 	
 	public AbstractDataWrapper(
 			WrapperParams wrapperParams,
-			AuthFields authFields ) {
+			AuthFields authFields) {
 		this.wrapperParams = wrapperParams;
 		this.authFields = authFields;
 		this.wrapperUID = uidCounter++;
