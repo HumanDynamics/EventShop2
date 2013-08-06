@@ -7,6 +7,7 @@ public class STTPoint {
 	private double value;
 	private WrapperParams wrapperParams;
 	private final long uid;
+	private final Timestamp time;
 	
 	/**
 	 * @param wrapperParams
@@ -14,11 +15,12 @@ public class STTPoint {
 	 * @param latitude
 	 * @param longitude
 	 */
-	public STTPoint(double value, LatLong latLong, WrapperParams wrapperParams) {
+	public STTPoint(double value, Timestamp time, LatLong latLong, WrapperParams wrapperParams) {
 		this.uid = uidCounter++;
 		this.value = value;
 		this.latLong = latLong;
 		this.wrapperParams = wrapperParams;
+		this.time = time;
 	}
 	
 	public LatLong getLatLong() {
