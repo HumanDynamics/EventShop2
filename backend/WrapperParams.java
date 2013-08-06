@@ -16,4 +16,10 @@ public class WrapperParams {
 		this.source = source;
 		this.theme = theme;
 	}
+	public String getSource(){
+	    return this.source;
+	}
+	public String getTheme(){
+	    return this.theme;
+	}
 }
