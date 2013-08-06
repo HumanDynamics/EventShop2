@@ -16,12 +16,10 @@ public class PointStream {
 	public final AbstractDataWrapper wrapperReference;
 	
 	//TODO: This is how often we call getWrappedData() periodically
+	//TODO: Where do we get this though?
 	private double pollingTimeMS;
 	private Iterator<STTPoint> pointIterator;
-	private double emagePollingTimeMS;
 	private ArrayList<STTPoint> emagePointQueue;
-	
-	private Timestamp lastEmageCreationTime;
 	
 	public PointStream(AbstractDataWrapper wrapperReference) {
 		this.wrapperReference = wrapperReference;

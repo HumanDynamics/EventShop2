@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class EmageBuilder {
 	
-	private PointStream pointStream;
+	private final PointStream pointStream;
 	
 	public EmageBuilder(PointStream pointStream) {
 		this.pointStream = pointStream;
@@ -71,8 +71,8 @@ public class EmageBuilder {
 	 * Assumes well formed bounding box, takes the absolute value of the differences.
 	 */
 	private double[][] createEmptyValueGrid(GeoParams geoParams, Operator operator) {
-		double delta_x = Math.abs(geoParams.geoBoundNW.latitude - geoParams.geoBoundSE.latitude);
-		double delta_y = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
+		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - geoParams.geoBoundSE.latitude);
+		double delta_x = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
 		
 		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
 		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
@@ -101,13 +101,13 @@ public class EmageBuilder {
 		 * TODO: possbily thats not the case (what if it's outside the bounding box???) maybe in that
 		 * case we should just throw it out?
 		 */
-		double delta_x = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
+		double delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
 		return (int) Math.round(delta_x/geoParams.geoResolutionX);
 	}
 	
 	//TODO: same issues as getXIndex
 	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
-		double delta_y = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
 		return (int) Math.round(delta_y/geoParams.geoResolutionY);
 	}
 }
