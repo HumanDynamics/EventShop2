@@ -12,7 +12,7 @@ import java.util.Iterator;
 
 public class PointStream {
 	
-	private final AbstractDataWrapper wrapperReference;
+	public final AbstractDataWrapper wrapperReference;
 	
 	//TODO: This is how often we call getWrappedData() periodically
 	private double pollingTimeMS;
@@ -46,10 +46,16 @@ public class PointStream {
 	
 	/**
 	 * Method to be called periodically to receive all of the new points since it's last invoking
+	 * Currently hard fails if the Wrapper isn't a GeoWrapper, as Emage will not be buildable
 	 * @param resetQueue Whether or not to empty the queue of fresh point that will be used to generate emages
 	 * @return
+	 * @throws Exception 
 	 */
-	public Iterator<STTPoint> getEmagePoints(boolean resetQueue) {
+	public Iterator<STTPoint> getPointsForEmage(boolean resetQueue) throws Exception {
+		
+		if (!(this.wrapperReference instanceof AbstractGeoWrapper)) {
+			throw new Exception();
+		}
 		Iterator<STTPoint> temp = this.emagePointQueue.iterator();
 		if (resetQueue) {
 			this.emagePointQueue = new ArrayList<STTPoint>();
@@ -57,4 +63,20 @@ public class PointStream {
 		return temp;
 	}
 	
+	public GeoParams getGeoParams() {
+		if (this.wrapperReference instanceof AbstractGeoWrapper) {
+			return ((AbstractGeoWrapper) this.wrapperReference).getGeoParams();
+		} else {
+			//TODO: should never reach here because EmageBuilder will fail calling getPointsForEmage
+			return null;
+		}
+	}
+	
+	public WrapperParams getWrapperParams() {
+		return this.wrapperReference.getWrapperParams();
+	}
+	
+	public AuthFields getAuthFields() {
+		return this.wrapperReference.getAuthFields();
+	}
 }

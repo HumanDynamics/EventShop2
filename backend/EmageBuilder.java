@@ -1,5 +1,7 @@
 package backend;
 
+import java.util.Iterator;
+
 public class EmageBuilder {
 		
 	/**
@@ -22,25 +24,75 @@ public class EmageBuilder {
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	
-	public Emage buildEmage(PointStream pointStream, double timeWindow, Operator operator) {
+	public Emage buildEmage(PointStream pointStream, double timeWindow, Operator operator) throws Exception {
+		Iterator<STTPoint> pointIterator = pointStream.getPointsForEmage(true);
+		GeoParams geoParams = pointStream.getGeoParams();
 		
+		double[][] valueGrid = createEmptyValueGrid(geoParams);
 		
+		//For holding the counts so we can compute the avg of each cell
+		double[][] avgAssistGrid = createEmptyValueGrid(geoParams);
 		
-		switch (operator) {
-		case MAX:
+		while (pointIterator.hasNext()) {
+			STTPoint currPoint = pointIterator.next();
+			int x = getXIndex(geoParams, currPoint);
+			int y = getYIndex(geoParams, currPoint);
 			
-			break;
-		case MIN:
-			break;
-		case SUM:
-			break;
-		case COUNT:
-			break;
-		case AVG:
-			break;
+			switch (operator) {
+			case MAX:
+				//TODO: what should we do here if no value is greater than 0, since java initializes to that
+				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
+				break;
+			case MIN:
+				//TODO: what should we do here if no value is less than 0, since java initializes to that
+				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
+				break;
+			case SUM:
+				valueGrid[x][y] += currPoint.getValue();
+				break;
+			case COUNT:
+				valueGrid[x][y]++;
+				break;
+			case AVG:
+				double total = valueGrid[x][y]*avgAssistGrid[x][y];
+				//Add one to the count from that cell, 
+				valueGrid[x][y] = (total+currPoint.getValue())/++avgAssistGrid[x][y];
+				break;
+			}
 		}
+		return new Emage(valueGrid, timeWindow, pointStream.getAuthFields(), 
+				pointStream.getWrapperParams(), geoParams);
+	}
+	
+	/*
+	 * Assumes well formed bounding box, takes the absolute value of the differences.
+	 */
+	private double[][] createEmptyValueGrid(GeoParams geoParams) {
+		double delta_x = Math.abs(geoParams.geoBoundNW.latitude - geoParams.geoBoundSE.latitude);
+		double delta_y = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
 		
+		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
+		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
 		
-		return null;
+		return new double[x_width][y_width];
+	}
+	
+	/*
+	 * TODO: This is definitely going to need some stronger error handling, for example near latitude 180 or 360 or whatever
+	 */
+	private int getXIndex(GeoParams geoParams, STTPoint sttPoint) {
+		/*
+		 *  assuming that since it's the top left corner, this will always be distance out from there
+		 * TODO: possbily thats not the case (what if it's outside the bounding box???) maybe in that
+		 * case we should just throw it out?
+		 */
+		double delta_x = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
+		return (int) Math.round(delta_x/geoParams.geoResolutionX);
+	}
+	
+	//TODO: same issues as getXIndex
+	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
+		double delta_y = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+		return (int) Math.round(delta_y/geoParams.geoResolutionY);
 	}
 }

@@ -20,4 +20,7 @@ public class AbstractGeoWrapper extends AbstractDataWrapper {
 		return null;
 	}
 
+	public GeoParams getGeoParams() {
+		return this.geoParams;
+	}
 }

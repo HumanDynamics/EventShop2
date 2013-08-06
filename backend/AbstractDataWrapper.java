@@ -25,4 +25,12 @@ public abstract class AbstractDataWrapper {
 	 * @return PointStream of the processed datasource
 	 */
 	public abstract ArrayList<STTPoint> getWrappedData();
+	
+	public AuthFields getAuthFields() {
+		return this.authFields;
+	}
+	
+	public WrapperParams getWrapperParams() {
+		return this.wrapperParams;
+	}
 }

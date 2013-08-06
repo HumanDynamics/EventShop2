@@ -20,4 +20,12 @@ public class STTPoint {
 		this.latLong = latLong;
 		this.wrapperParams = wrapperParams;
 	}
+	
+	public LatLong getLatLong() {
+		return this.latLong;
+	}
+	
+	public double getValue() {
+		return this.value;
+	}
 }
