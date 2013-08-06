@@ -8,11 +8,10 @@ public class TwitterWrapper extends AbstractDataWrapper {
 	 * @param authFields
 	 */
 	public TwitterWrapper(
-			EmageParams emageParams, 
 			WrapperParams wrapperParams,
 			AuthFields authFields
 			) {
-		super(emageParams, wrapperParams, authFields);
+		super(wrapperParams, authFields);
 		
 	}
 
@@ -30,6 +29,14 @@ public class TwitterWrapper extends AbstractDataWrapper {
             @Override
             public void onStatus(Status status) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+                GeoLocation tweetLocation=status.getGeoLocation();
+                double latitude = tweetLocation.getLatitude();
+                double longitude = tweetLocation.getLongitude();
+                String source = status.getSource();
+                Timestamp time = new Timestamp((status.getCreatedAt()).getTime());
+                WrapperParams params = new WrapperParams(source,wrapperParams.getTheme());
+                STTPoint point = new STTPoint(**value**,time,new LatLong(latitude,longitude),params);
+                pointList.add(point);
             }
 
             @Override
