@@ -15,8 +15,10 @@ public class TestMain {
 		//USER INPUT
 		WrapperParams wrapperParams = new WrapperParams("Source", "Theme");
 		
-		//USER DECIDES
-		AbstractDataWrapper cw = new CSVWrapper(wrapperParams, authFields, geoParams);
+		//USER INPUT STRING->ENUM->Wrapper
+		String userWrapperInput = "CSV";
+		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(userWrapperInput);
+		AbstractDataWrapper cw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
 		PointStream ps = new PointStream(cw);
 		
