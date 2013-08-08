@@ -18,9 +18,9 @@ public class CSVWrapper extends AbstractGeoWrapper {
 	                //assuming the file is in this <lat, long, timestamp, theme, value> specified format
 	                LatLong location = new LatLong(Double.parseDouble(filePieces[0]),Double.parseDouble(filePieces[1]));
 	                Timestamp time = new Timestamp(Timestamp.valueOf(filePieces[2])); //this depends on how the time is formatted as a string, here I'm assuming JDBC timestamp escape format for simplicity
-	                String value = filePieces[4];
+	                double value = Double.parseDouble(filePieces[4]);
 	                WrapperParams params = new WrapperParams(getWrapperParams().getSource,filePieces[3]);
-	                STTPoint point = new STTPoint(**value**,time,location,params);
+	                STTPoint point = new STTPoint(value,time,location,params);
 	                pointList.add(point);
 	            }else{
 	                throw new IllegalArgumentException("The file is not in CSV format.");
