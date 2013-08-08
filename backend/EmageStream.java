@@ -14,13 +14,19 @@ public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
 	private double emagePollingTimeMS;
+	private double timeWindowStart, timeWindowEnd;
 	
 	public EmageStream(EmageBuilder emageBuilder) {
 		this.emageBuilder = emageBuilder;
 	}
 
 	public Emage getNextEmage() {
+		try {
+			return this.emageBuilder.buildEmage(timeWindowStart, timeWindowEnd);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
-		
 	}
 }

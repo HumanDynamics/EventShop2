@@ -30,7 +30,7 @@ public class EmageBuilder {
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	
-	public Emage buildEmage(double timeWindow) throws Exception {
+	public Emage buildEmage(double timeWindowStart, double timeWindowEnd) throws Exception {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
@@ -65,7 +65,7 @@ public class EmageBuilder {
 				break;
 			}
 		}
-		return new Emage(valueGrid, timeWindow, this.pointStream.getAuthFields(), 
+		return new Emage(valueGrid, timeWindowStart, timeWindowEnd, this.pointStream.getAuthFields(), 
 				this.pointStream.getWrapperParams(), geoParams);
 	}
 	

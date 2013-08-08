@@ -4,7 +4,8 @@ public class Emage {
 
 	private double[][] valueGrid;
 	private final long emageUID;
-	private final double timeWindow;
+	private final double timeWindowStart;
+	private final double timeWindowEnd;
 	private final WrapperParams wrapperParams;
 	private final GeoParams geoParams;
 	private AuthFields authFields;
@@ -21,10 +22,11 @@ public class Emage {
 	 * @param geoParams
 	 * @param emageUID
 	 */
-	public Emage(double[][] valueGrid, double timeWindow,
+	public Emage(double[][] valueGrid, double timeWindowStart, double timeWindowEnd,
 			AuthFields authFields, WrapperParams wrapperParams, GeoParams geoParams) {
 		this.valueGrid = valueGrid;
-		this.timeWindow = timeWindow;
+		this.timeWindowStart = timeWindowStart;
+		this.timeWindowEnd = timeWindowEnd;
 		this.wrapperParams = wrapperParams;
 		this.geoParams = geoParams;
 		this.authFields = authFields;
