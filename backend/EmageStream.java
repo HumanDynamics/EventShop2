@@ -21,5 +21,6 @@ public class EmageStream {
 
 	public Emage getNextEmage() {
 		return null;
+		
 	}
 }

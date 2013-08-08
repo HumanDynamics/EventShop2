@@ -5,7 +5,7 @@ public class WrapperParams {
 	private final String source;
 	private final String theme;
 	
-	/*
+	/**
 	 * @Author pmarx
 	 * Basic setup just so it compiles
 	 */ 

@@ -6,9 +6,11 @@ import java.util.Arrays;
 public class EmageBuilder {
 	
 	private final PointStream pointStream;
+	private final Operator operator;
 	
-	public EmageBuilder(PointStream pointStream) {
+	public EmageBuilder(PointStream pointStream, Operator operator) {
 		this.pointStream = pointStream;
+		this.operator = operator;
 	}
 		
 	/**
@@ -28,12 +30,12 @@ public class EmageBuilder {
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	
-	public Emage buildEmage(double timeWindow, Operator operator) throws Exception {
+	public Emage buildEmage(double timeWindow) throws Exception {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
-		double[][] valueGrid = createEmptyValueGrid(geoParams, operator);
+		double[][] valueGrid = createEmptyValueGrid(geoParams, this.operator);
 		
 		//For holding the counts so we can compute the avg of each cell
 		double[][] avgAssistGrid = createEmptyValueGrid(geoParams, Operator.AVG);
@@ -43,7 +45,7 @@ public class EmageBuilder {
 			int x = getXIndex(geoParams, currPoint);
 			int y = getYIndex(geoParams, currPoint);
 			
-			switch (operator) {
+			switch (this.operator) {
 			case MAX:
 				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
 				break;
