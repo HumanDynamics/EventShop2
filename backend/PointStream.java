@@ -15,14 +15,23 @@ public class PointStream {
 	
 	public final AbstractDataWrapper wrapperReference;
 	
+	
+	/*
+	 * TODO: I think this might be the best place to handle the rolling window aspect.
+	 * Possibly we could do it by instead of clearing the emageQueue on a pull, we could just clear the part
+	 * that isnt in the window anymore. Or the list could be out of time order in which case were kinda screwed
+	 * on that approach. If that's the case then I think we could have internal storage of the emage points in
+	 * the builder itself and have it do the reordering and then use the same solution.
+	 */
+	
 	//TODO: This is how often we call getWrappedData() periodically
-	//TODO: Where do we get this though?
 	private double pollingTimeMS;
 	private Iterator<STTPoint> pointIterator;
 	private ArrayList<STTPoint> emagePointQueue;
 	
-	public PointStream(AbstractDataWrapper wrapperReference) {
+	public PointStream(AbstractDataWrapper wrapperReference, double pollingTimeMS) {
 		this.wrapperReference = wrapperReference;
+		this.pollingTimeMS = pollingTimeMS;
 		this.emagePointQueue = new ArrayList<STTPoint>();
 	}
 	

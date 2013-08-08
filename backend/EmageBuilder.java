@@ -1,5 +1,6 @@
 package backend;
 
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.Arrays;
 
@@ -30,7 +31,7 @@ public class EmageBuilder {
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	
-	public Emage buildEmage(double timeWindowStart, double timeWindowEnd) throws Exception {
+	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) throws Exception {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
@@ -42,27 +43,33 @@ public class EmageBuilder {
 		
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
-			int x = getXIndex(geoParams, currPoint);
-			int y = getYIndex(geoParams, currPoint);
 			
-			switch (this.operator) {
-			case MAX:
-				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
-				break;
-			case MIN:
-				valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
-				break;
-			case SUM:
-				valueGrid[x][y] += currPoint.getValue();
-				break;
-			case COUNT:
-				valueGrid[x][y]++;
-				break;
-			case AVG:
-				double total = valueGrid[x][y]*avgAssistGrid[x][y];
-				//Add one to the count from that cell, 
-				valueGrid[x][y] = (total+currPoint.getValue())/++avgAssistGrid[x][y];
-				break;
+			boolean isWithinTimeWindow = currPoint.getTimestamp().before(timeWindowEnd) &&
+					currPoint.getTimestamp().after(timeWindowStart);
+			
+			if (isWithinTimeWindow) {	
+				int x = getXIndex(geoParams, currPoint);
+				int y = getYIndex(geoParams, currPoint);
+				
+				switch (this.operator) {
+				case MAX:
+					valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
+					break;
+				case MIN:
+					valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
+					break;
+				case SUM:
+					valueGrid[x][y] += currPoint.getValue();
+					break;
+				case COUNT:
+					valueGrid[x][y]++;
+					break;
+				case AVG:
+					double total = valueGrid[x][y]*avgAssistGrid[x][y];
+					//Add one to the count from that cell, 
+					valueGrid[x][y] = (total+currPoint.getValue())/++avgAssistGrid[x][y];
+					break;
+				}
 			}
 		}
 		return new Emage(valueGrid, timeWindowStart, timeWindowEnd, this.pointStream.getAuthFields(), 

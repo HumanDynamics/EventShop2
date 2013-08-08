@@ -1,11 +1,12 @@
  package backend;
 
+import java.sql.Timestamp;
+
 public class Emage {
 
 	private double[][] valueGrid;
 	private final long emageUID;
-	private final double timeWindowStart;
-	private final double timeWindowEnd;
+	private final Timestamp timeWindowStart, timeWindowEnd;
 	private final WrapperParams wrapperParams;
 	private final GeoParams geoParams;
 	private AuthFields authFields;
@@ -22,7 +23,7 @@ public class Emage {
 	 * @param geoParams
 	 * @param emageUID
 	 */
-	public Emage(double[][] valueGrid, double timeWindowStart, double timeWindowEnd,
+	public Emage(double[][] valueGrid, Timestamp timeWindowStart, Timestamp timeWindowEnd,
 			AuthFields authFields, WrapperParams wrapperParams, GeoParams geoParams) {
 		this.valueGrid = valueGrid;
 		this.timeWindowStart = timeWindowStart;

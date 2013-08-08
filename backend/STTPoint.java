@@ -32,4 +32,8 @@ public class STTPoint {
 	public double getValue() {
 		return this.value;
 	}
+	
+	public Timestamp getTimestamp() {
+		return this.time;
+	}
 }

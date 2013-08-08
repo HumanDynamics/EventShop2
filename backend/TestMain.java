@@ -20,7 +20,9 @@ public class TestMain {
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(userWrapperInput);
 		AbstractDataWrapper cw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		PointStream ps = new PointStream(cw);
+		double pollingTimeMS = 10000;
+		
+		PointStream ps = new PointStream(cw, pollingTimeMS);
 		
 		//USER CHOOSES OPERATOR
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.COUNT);

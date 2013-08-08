@@ -14,7 +14,7 @@ public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
 	private double emagePollingTimeMS;
-	private double timeWindowStart, timeWindowEnd;
+	private Timestamp timeWindowStart, timeWindowEnd;
 	
 	public EmageStream(EmageBuilder emageBuilder) {
 		this.emageBuilder = emageBuilder;
