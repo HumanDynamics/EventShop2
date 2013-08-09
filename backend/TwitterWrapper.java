@@ -75,7 +75,7 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	}
 
 	@Override
-	ArrayList<STTPoint> getWrappedData() {
+	public ArrayList<STTPoint> getWrappedData() {
 	    ArrayList<STTPoint> newList = new ArrayList<STTPoint>();
 	    for(STTPoint point:pointList){
 	        newList.add(point);
