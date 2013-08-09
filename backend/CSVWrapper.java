@@ -1,6 +1,7 @@
 package backend;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.sql.Timestamp;
@@ -18,9 +19,9 @@ public class CSVWrapper extends AbstractGeoWrapper {
 	                String[] filePieces = fileLine.split(",");
 	                //assuming the file is in this <lat, long, timestamp, theme, value> specified format
 	                LatLong location = new LatLong(Double.parseDouble(filePieces[0]),Double.parseDouble(filePieces[1]));
-	                Timestamp time = new Timestamp(Timestamp.valueOf(filePieces[2])); //this depends on how the time is formatted as a string, here I'm assuming JDBC timestamp escape format for simplicity
+	                Timestamp time = Timestamp.valueOf(filePieces[2]); //this depends on how the time is formatted as a string, here I'm assuming JDBC timestamp escape format for simplicity
 	                double value = Double.parseDouble(filePieces[4]);
-	                WrapperParams params = new WrapperParams(getWrapperParams().getSource,filePieces[3]);
+	                WrapperParams params = new WrapperParams(getWrapperParams().getSource(),filePieces[3]);
 	                STTPoint point = new STTPoint(value,time,location,params);
 	                pointList.add(point);
 	            }else{

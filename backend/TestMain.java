@@ -10,7 +10,7 @@ public class TestMain {
 		
 		//1 1 USER INPUT
 		GeoParams geoParams = new GeoParams(1, 1, boundingBoxNE, boundingBoxSW);
-		AuthFields authFields = new AuthFields();
+		AuthFields authFields = new AuthFields("", "", "", "");
 		
 		//USER INPUT
 		WrapperParams wrapperParams = new WrapperParams("Source", "Theme");
