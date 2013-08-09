@@ -20,8 +20,8 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	 */
     ArrayList<STTPoint> pointList;
     
-	public TwitterWrapper(WrapperParams wrapperParams,AuthFields authFields){
-		super(wrapperParams, authFields);
+	public TwitterWrapper(WrapperParams wrapperParams, AuthFields authFields, GeoParams geoParams){
+		super(wrapperParams, authFields, geoParams);
 		pointList = new ArrayList<STTPoint>();
         FilterQuery query= new FilterQuery();
         query.track(new String[]{wrapperParams.getTheme()});
