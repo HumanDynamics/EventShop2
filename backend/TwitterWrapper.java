@@ -18,15 +18,13 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	 * @param wrapperParams
 	 * @param authFields
 	 */
+    ArrayList<STTPoint> pointList;
+    
 	public TwitterWrapper(WrapperParams wrapperParams,AuthFields authFields){
 		super(wrapperParams, authFields);
-	}
-
-	@Override
-	void getWrappedData() {
-	    ArrayList<STTPoint> pointList = new ArrayList<STTPoint>();
-	    FilterQuery query= new FilterQuery();
-        //query.track(keywords);
+		pointList = new ArrayList<STTPoint>();
+        FilterQuery query= new FilterQuery();
+        query.track(new String[]{wrapperParams.getTheme()});
         //query.locations(locations);
         TwitterStream twitterStream= new TwitterStreamFactory().getInstance();
         //twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));
@@ -76,5 +74,14 @@ public class TwitterWrapper extends AbstractGeoWrapper {
         twitterStream.filter(query);
 	}
 
-}
+	@Override
+	ArrayList<STTPoint> getWrappedData() {
+	    ArrayList<STTPoint> newList = new ArrayList<STTPoint>();
+	    for(STTPoint point:pointList){
+	        newList.add(point);
+	    }
+	    pointList.clear();
+	    return newList;
+	}
 
+}
