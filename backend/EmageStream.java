@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
-	private double emagePollingTimeMS;
+	private long emagePollingTimeMS;
 	private Timestamp timeWindowStart, timeWindowEnd;
 	
 	public EmageStream(EmageBuilder emageBuilder) {
@@ -22,11 +22,24 @@ public class EmageStream {
 
 	public Emage getNextEmage() {
 		try {
-			return this.emageBuilder.buildEmage(timeWindowStart, timeWindowEnd);
+			/*
+			 * TODO: currently this just outputs an emage with a timewindow of from the last
+			 * emage creation time to that time plus the length of the polling time. This should
+			 * probably different, with enforcement of not calling getNextEmage until we're at a
+			 * new polling window
+			 */
+			Emage output = this.emageBuilder.buildEmage(lastEmageCreationTime, 
+					 new Timestamp(lastEmageCreationTime.getTime()+emagePollingTimeMS));
+			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
+			return output;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public Timestamp getLastCreationTime() {
+		return lastEmageCreationTime;
 	}
 }

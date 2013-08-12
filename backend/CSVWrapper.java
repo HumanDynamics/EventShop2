@@ -7,6 +7,29 @@ import java.util.ArrayList;
 import java.sql.Timestamp;
 
 public class CSVWrapper extends AbstractGeoWrapper {
+	
+	/**
+	 * @param wrapperParams
+	 * @param authFields
+	 * @param geoResolution
+	 * @param geoBoundingBoxSouthWest
+	 * @param geoBoundingBoxNorthEast
+	 * @param source
+	 * @param theme
+	 */
+	public CSVWrapper(WrapperParams wrapperParams, AuthFields authFields,
+			GeoParams geoParams) {
+		super(wrapperParams, authFields, geoParams);
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	/* 
+	 * TODO: This looks like it just grabs the whole file every time, should we be concerned about getting
+	 * Repeat data, or reading the same points twice? For example what if only half the doc is updated but
+	 * we pull all of it
+	 */
+	
 	@Override
 	public ArrayList<STTPoint> getWrappedData() {
 	    ArrayList<STTPoint> pointList = new ArrayList<STTPoint>();
@@ -36,20 +59,4 @@ public class CSVWrapper extends AbstractGeoWrapper {
 	    }
 	    return pointList;
 	}
-
-	/**
-	 * @param wrapperParams
-	 * @param authFields
-	 * @param geoResolution
-	 * @param geoBoundingBoxSouthWest
-	 * @param geoBoundingBoxNorthEast
-	 * @param source
-	 * @param theme
-	 */
-	public CSVWrapper(WrapperParams wrapperParams, AuthFields authFields,
-			GeoParams geoParams) {
-		super(wrapperParams, authFields, geoParams);
-		// TODO Auto-generated constructor stub
-	}
-
 }

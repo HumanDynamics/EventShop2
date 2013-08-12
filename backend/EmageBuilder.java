@@ -109,9 +109,8 @@ public class EmageBuilder {
 
 	private int getXIndex(GeoParams geoParams, STTPoint sttPoint) {
 		/*
-		 *  assuming that since it's the top left corner, this will always be distance out from there
-		 * TODO: possbily thats not the case (what if it's outside the bounding box???) maybe in that
-		 * case we should just throw it out?
+		 * TODO: what if it's outside the bounding box???) maybe in that case we should
+		 *  just throw it out?
 		 */
 		double delta_x;
 		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude && 

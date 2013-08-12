@@ -5,7 +5,6 @@ public class GeoParams {
 	//TODO: THIS IS HOW LARGE A CELL IS, IN UNITS OF lat/long
 	public final double geoResolutionX;
 	public final double geoResolutionY;
-	//use rounding for cells that don't quite fit the box
 	
 	public final LatLong geoBoundSE;
 	public final LatLong geoBoundNW;

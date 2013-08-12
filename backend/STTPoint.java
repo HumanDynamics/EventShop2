@@ -9,7 +9,8 @@ public class STTPoint {
 	private double value;
 	private WrapperParams wrapperParams;
 	private final long uid;
-	private final Timestamp time;
+	private final Timestamp localCreationTime;
+	private final Timestamp pullTime;
 	
 	/**
 	 * @param wrapperParams
@@ -17,12 +18,13 @@ public class STTPoint {
 	 * @param latitude
 	 * @param longitude
 	 */
-	public STTPoint(double value, Timestamp time, LatLong latLong, WrapperParams wrapperParams) {
+	public STTPoint(double value, Timestamp pullTime, LatLong latLong, WrapperParams wrapperParams) {
 		this.uid = uidCounter++;
 		this.value = value;
 		this.latLong = latLong;
 		this.wrapperParams = wrapperParams;
-		this.time = time;
+		this.pullTime = pullTime;
+		this.localCreationTime = new Timestamp(System.currentTimeMillis());
 	}
 	
 	public LatLong getLatLong() {
@@ -33,7 +35,11 @@ public class STTPoint {
 		return this.value;
 	}
 	
-	public Timestamp getTimestamp() {
-		return this.time;
+	public Timestamp getCreationTime() {
+		return this.localCreationTime;
+	}
+	
+	public Timestamp getPullTime() {
+		return this.pullTime;
 	}
 }

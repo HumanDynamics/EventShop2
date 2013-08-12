@@ -11,7 +11,6 @@ public class LatLong {
 	public final double latitude;
 	public final double longitude;
 	
-	
 	/**
 	 * Representation of a single point latitude/longitude. Fails if outside of reasonable values
 	 * @param latitude  Latitudes plus (North) and minus (south) degrees from the equator -90<x<90
