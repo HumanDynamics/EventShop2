@@ -30,7 +30,6 @@ public class EmageBuilder {
 	/*
 	 * TODO: should we assume pointstream will always return something?
 	 */
-	
 	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) throws Exception {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
 		GeoParams geoParams = this.pointStream.getGeoParams();
@@ -44,8 +43,8 @@ public class EmageBuilder {
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
 			
-			boolean isWithinTimeWindow = currPoint.getTimestamp().before(timeWindowEnd) &&
-					currPoint.getTimestamp().after(timeWindowStart);
+			boolean isWithinTimeWindow = currPoint.getCreationTime().before(timeWindowEnd) &&
+					currPoint.getCreationTime().after(timeWindowStart);
 			
 			if (isWithinTimeWindow) {	
 				int x = getXIndex(geoParams, currPoint);

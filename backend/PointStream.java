@@ -58,10 +58,16 @@ public class PointStream {
 	 * @return
 	 * @throws Exception 
 	 */
-	public Iterator<STTPoint> getPointsForEmage(boolean resetQueue) throws Exception {
+	
+	/*
+	 * TODO: can we make this method be what handles a rolling window?
+	 * so instead of just clearing the list it intelligently clears it to only have the parts
+	 * that are important to us
+	 */
+	public Iterator<STTPoint> getPointsForEmage(boolean resetQueue) {
 		
 		if (!(this.wrapperReference instanceof AbstractGeoWrapper)) {
-			throw new Exception();
+			throw new IllegalArgumentException();
 		}
 		Iterator<STTPoint> temp = this.emagePointQueue.iterator();
 		if (resetQueue) {
