@@ -54,24 +54,19 @@ public class PointStream {
 	/**
 	 * Method to be called periodically to receive all of the new points since it's last invoking
 	 * Currently hard fails if the Wrapper isn't a GeoWrapper, as Emage will not be buildable
-	 * @param resetQueue Whether or not to empty the queue of fresh point that will be used to generate emages
+	 * @param keepPointsAfter Points created after this time will be saved on the queue. Passing null empties the whole queue.
 	 * @return
-	 * @throws Exception 
 	 */
-	
-	/*
-	 * TODO: can we make this method be what handles a rolling window?
-	 * so instead of just clearing the list it intelligently clears it to only have the parts
-	 * that are important to us
-	 */
-	public Iterator<STTPoint> getPointsForEmage(boolean resetQueue) {
+	public Iterator<STTPoint> getPointsForEmage(Timestamp keepPointsAfter) {
 		
 		if (!(this.wrapperReference instanceof AbstractGeoWrapper)) {
 			throw new IllegalArgumentException();
 		}
 		Iterator<STTPoint> temp = this.emagePointQueue.iterator();
-		if (resetQueue) {
+		if (keepPointsAfter == null) {
 			this.emagePointQueue = new ArrayList<STTPoint>();
+		} else {
+			this.emagePointQueue = clearNonWindowPoints(this.emagePointQueue, keepPointsAfter);
 		}
 		return temp;
 	}
@@ -91,5 +86,21 @@ public class PointStream {
 	
 	public AuthFields getAuthFields() {
 		return this.wrapperReference.getAuthFields();
+	}
+	
+	
+	/**
+	 * Helper method for enabling a rolling time window. Returns an array of all
+	 * the points that were created after a certain time
+	 * TODO: is there a more efficient way of doing this? does it matter?
+	 */
+	private ArrayList<STTPoint> clearNonWindowPoints(ArrayList<STTPoint> list, Timestamp keepPointsAfter) {
+		ArrayList<STTPoint> output = new ArrayList<STTPoint>();
+		for (int i=0;i<list.size();i++){
+			if (keepPointsAfter.before(list.get(i).getCreationTime())) {
+				output.add(list.get(i));
+			}
+		}
+		return output;
 	}
 }

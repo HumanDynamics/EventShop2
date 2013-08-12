@@ -31,7 +31,7 @@ public class EmageBuilder {
 	 * TODO: should we assume pointstream will always return something?
 	 */
 	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) throws Exception {
-		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(true);
+		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(null);
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
