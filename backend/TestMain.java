@@ -20,22 +20,22 @@ public class TestMain {
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(userWrapperInput);
 		AbstractDataWrapper cw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		double pollingTimeMS = 10000;
+		//USER INPUT, modifiable at runtime
+		long pointPollingTimeMS = 100;
+		long emagePollingTimeMS = 10000;
 		
-		PointStream ps = new PointStream(cw, pollingTimeMS);
+		PointStream ps = new PointStream(cw);
+		ps.setPollingTimeMS(pointPollingTimeMS);
 		
 		//USER CHOOSES OPERATOR
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.COUNT);
 		EmageStream es = new EmageStream(eb);
+		es.setPollingTimeMS(emagePollingTimeMS);
 		
 		//THIS IS WHERE SCHEDULING COMES IN
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<1000; i++) {
 			System.out.println(ps.getNextPoint());
-			if (i%25 == 0) {
-				System.out.println(es.getNextEmage());
-			}
 		}
-		
+		System.out.println(es.getNextEmage());
 	}
-
 }

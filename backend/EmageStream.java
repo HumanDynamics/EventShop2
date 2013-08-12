@@ -13,11 +13,17 @@ import java.sql.Timestamp;
 public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
-	private long emagePollingTimeMS;
+	private long pollingTimeMS;
 	private Timestamp timeWindowStart, timeWindowEnd;
 	
+	/**
+	 * polling time defaults to 30000MS, can be set after instantiation
+	 * @param emageBuilder
+	 */
 	public EmageStream(EmageBuilder emageBuilder) {
 		this.emageBuilder = emageBuilder;
+		this.pollingTimeMS = 30000;
+		this.lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 	}
 
 	public Emage getNextEmage() {
@@ -29,7 +35,7 @@ public class EmageStream {
 			 * new polling window
 			 */
 			Emage output = this.emageBuilder.buildEmage(lastEmageCreationTime, 
-					 new Timestamp(lastEmageCreationTime.getTime()+emagePollingTimeMS));
+					 new Timestamp(lastEmageCreationTime.getTime()+pollingTimeMS));
 			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 			return output;
 		} catch (Exception e) {
@@ -37,6 +43,10 @@ public class EmageStream {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void setPollingTimeMS(long pollTimeMS) {
+		this.pollingTimeMS = pollTimeMS;
 	}
 	
 	public Timestamp getLastCreationTime() {
