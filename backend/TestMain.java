@@ -1,41 +1,38 @@
 package backend;
 
+
 public class TestMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
+		DataPipeline pipeline = buildNewPipeline(50,50,30,70,1,1,"Source","Theme", "CSV", "COUNT");
+		for (int i=0;i<100;i++) {
+			System.out.println(pipeline.pointStream.getNextPoint());
+		}
+		System.out.println(pipeline.emageStream.getNextEmage());
+	}
+	
+	//TODO: this signature will change when this actually supports json, for now will use all primitives
+	private static DataPipeline buildNewPipeline(double NElat, double NElong, double SWlat, double SWlong,
+			double resolutionX, double resolutionY, String source, String theme, String wrapperType,
+			String operatorType) {
 		
-		//USER INPUT
-		LatLong boundingBoxNE = new LatLong(30,30);
-		LatLong boundingBoxSW = new LatLong(10,50);
+		LatLong boundingBoxNE = new LatLong(NElat, NElong);
+		LatLong boundingBoxSW = new LatLong(SWlat, SWlong);
 		
-		//1 1 USER INPUT
-		GeoParams geoParams = new GeoParams(1, 1, boundingBoxNE, boundingBoxSW);
+		GeoParams geoParams = new GeoParams(resolutionX, resolutionY, boundingBoxNE, boundingBoxSW);
 		AuthFields authFields = new AuthFields("", "", "", "");
 		
-		//USER INPUT
-		WrapperParams wrapperParams = new WrapperParams("Source", "Theme");
+		WrapperParams wrapperParams = new WrapperParams(source, theme);
 		
-		//USER INPUT STRING->ENUM->Wrapper
-		String userWrapperInput = "CSV";
-		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(userWrapperInput);
+		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(wrapperType);
 		AbstractDataWrapper cw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		//USER INPUT, modifiable at runtime
-		long pointPollingTimeMS = 100;
-		long emagePollingTimeMS = 10000;
-		
 		PointStream ps = new PointStream(cw);
-		ps.setPollingTimeMS(pointPollingTimeMS);
 		
 		//USER CHOOSES OPERATOR
-		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.COUNT);
+		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(operatorType));
 		EmageStream es = new EmageStream(eb);
-		es.setPollingTimeMS(emagePollingTimeMS);
 		
-		//THIS IS WHERE SCHEDULING COMES IN
-		for (int i=0; i<1000; i++) {
-			System.out.println(ps.getNextPoint());
-		}
-		System.out.println(es.getNextEmage());
+		return new DataPipeline(ps, es);
 	}
 }

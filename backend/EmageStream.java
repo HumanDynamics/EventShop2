@@ -22,7 +22,9 @@ public class EmageStream {
 	 */
 	public EmageStream(EmageBuilder emageBuilder) {
 		this.emageBuilder = emageBuilder;
-		this.pollingTimeMS = 30000;
+		
+		//TODO: is it wise to have this be a default? should there be a separate constructor? 
+		this.pollingTimeMS = 60*60*1000;
 		this.lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 	}
 

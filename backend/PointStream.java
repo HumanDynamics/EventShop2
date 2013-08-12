@@ -27,6 +27,8 @@ public class PointStream {
 	 */
 	public PointStream(AbstractDataWrapper wrapperReference) {
 		this.wrapperReference = wrapperReference;
+		
+		//TODO: is it wise to have this be a default? should there be a separate constructor? 
 		this.pollingTimeMS = 100;
 		this.emagePointQueue = new ArrayList<STTPoint>();
 	}
