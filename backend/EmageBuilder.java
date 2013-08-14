@@ -30,7 +30,7 @@ public class EmageBuilder {
 	/*
 	 * TODO: should we assume pointstream will always return something?
 	 */
-	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) throws Exception {
+	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(null);
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		

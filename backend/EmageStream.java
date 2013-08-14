@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
-	private long pollingTimeMS;
+	private long emagePollingTimeMS;
 	private Timestamp timeWindowStart, timeWindowEnd;
 	
 	/**
@@ -24,31 +24,34 @@ public class EmageStream {
 		this.emageBuilder = emageBuilder;
 		
 		//TODO: is it wise to have this be a default? should there be a separate constructor? 
-		this.pollingTimeMS = 60*60*1000;
+		this.emagePollingTimeMS = 60*60*1000;
 		this.lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 	}
 
+	/**
+	 * 
+	 * @return Emage of the most recent points
+	 */
 	public Emage getNextEmage() {
-		try {
-			/*
-			 * TODO: currently this just outputs an emage with a timewindow of from the last
-			 * emage creation time to that time plus the length of the polling time. This should
-			 * probably different, with enforcement of not calling getNextEmage until we're at a
-			 * new polling window
-			 */
-			Emage output = this.emageBuilder.buildEmage(lastEmageCreationTime, 
-					 new Timestamp(lastEmageCreationTime.getTime()+pollingTimeMS));
+		long timeSinceLastEmage = System.currentTimeMillis() - this.lastEmageCreationTime.getTime();
+		Emage output;
+		if (timeSinceLastEmage > this.emagePollingTimeMS) {
+			output = this.emageBuilder.buildEmage(new Timestamp(0), new Timestamp(System.currentTimeMillis()));
 			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
-			return output;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		return output;
+		} else {
+			long sleepTime = 5 + this.emagePollingTimeMS - (System.currentTimeMillis() - this.lastEmageCreationTime.getTime());
+			try {
+				Thread.sleep(sleepTime);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return getNextEmage();
 		}
-		return null;
 	}
 	
 	public void setPollingTimeMS(long pollTimeMS) {
-		this.pollingTimeMS = pollTimeMS;
+		this.emagePollingTimeMS = pollTimeMS;
 	}
 	
 	public Timestamp getLastCreationTime() {

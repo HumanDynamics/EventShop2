@@ -16,7 +16,8 @@ public class PointStream {
 	public final AbstractDataWrapper wrapperReference;
 	
 	//TODO: This is how often we call getWrappedData() periodically
-	private long pollingTimeMS;
+	private long pointPollingTimeMS;
+	private Timestamp lastDataPullTime;
 	private Iterator<STTPoint> pointIterator;
 	private ArrayList<STTPoint> emagePointQueue;
 	
@@ -29,23 +30,33 @@ public class PointStream {
 		this.wrapperReference = wrapperReference;
 		
 		//TODO: is it wise to have this be a default? should there be a separate constructor? 
-		this.pollingTimeMS = 100;
+		this.pointPollingTimeMS = 100;
 		this.emagePointQueue = new ArrayList<STTPoint>();
+		this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
 	}
 	
 	public STTPoint getNextPoint() {
-		if (pointIterator == null || !pointIterator.hasNext()) {
+		long timeSinceLastPull = System.currentTimeMillis() - this.lastDataPullTime.getTime();
+		
+		if (timeSinceLastPull > this.pointPollingTimeMS) {
 			ArrayList<STTPoint> newData = this.wrapperReference.getWrappedData();
+			this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
+			
 			this.emagePointQueue.addAll(newData);
 			this.pointIterator = newData.iterator();
-			
-			/*TODO: MUST FIX. This could easily be a source of infinite recursion. 
-			 *  but assuming you will eventually get some data it shouldn't be an issue now,
-			 *  and pollingTime should permanently fix this
-			*/
 			return getNextPoint();
 		} else {
-			return pointIterator.next();
+			if (pointIterator == null || !pointIterator.hasNext()) {
+				long sleepTime = 5 + this.pointPollingTimeMS - (System.currentTimeMillis() - this.lastDataPullTime.getTime());
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return getNextPoint();
+			} else {
+				return pointIterator.next();
+			}
 		}
 	}
 	
@@ -87,7 +98,7 @@ public class PointStream {
 	}
 	
 	public void setPollingTimeMS(long pollTimeMS) {
-		this.pollingTimeMS = pollTimeMS;
+		this.pointPollingTimeMS = pollTimeMS;
 	}
 	
 	/**

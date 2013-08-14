@@ -29,7 +29,6 @@ public class TestMain {
 		
 		PointStream ps = new PointStream(cw);
 		
-		//USER CHOOSES OPERATOR
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(operatorType));
 		EmageStream es = new EmageStream(eb);
 		
