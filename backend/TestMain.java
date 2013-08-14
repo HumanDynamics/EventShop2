@@ -4,11 +4,29 @@ package backend;
 public class TestMain {
 
 	public static void main(String[] args) {		
-		DataPipeline pipeline = buildNewPipeline(50,50,30,70,1,1,"Source","Theme", "CSV", "COUNT");
-		for (int i=0;i<100;i++) {
-			System.out.println(pipeline.pointStream.getNextPoint());
-		}
-		System.out.println(pipeline.emageStream.getNextEmage());
+		final DataPipeline pipeline = buildNewPipeline(50,50,30,70,1,1,"Source","Theme", "TWITTER", "COUNT");
+		
+		Thread pointThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					System.out.println(pipeline.pointStream.getNextPoint());
+				}
+			} 	
+		});
+		
+		Thread emageThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					System.out.println(pipeline.emageStream.getNextEmage());
+				}
+			}
+		});
+		
+		pointThread.start();
+		emageThread.start();
+		
 	}
 	
 	//TODO: this signature will change when this actually supports json, for now will use all primitives

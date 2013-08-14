@@ -20,7 +20,7 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	 */
     ArrayList<STTPoint> pointList;
     
-	public TwitterWrapper(WrapperParams wrapperParams, AuthFields authFields, GeoParams geoParams){
+	public TwitterWrapper(final WrapperParams wrapperParams, AuthFields authFields, GeoParams geoParams){
 		super(wrapperParams, authFields, geoParams);
 		pointList = new ArrayList<STTPoint>();
         FilterQuery query= new FilterQuery();
@@ -34,10 +34,11 @@ public class TwitterWrapper extends AbstractGeoWrapper {
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {
-                //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
-                GeoLocation tweetLocation=status.getGeoLocation();
-                double latitude = tweetLocation.getLatitude();
-                double longitude = tweetLocation.getLongitude();
+//                System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
+//                GeoLocation tweetLocation=status.getGeoLocation();
+//                double latitude = tweetLocation.getLatitude();
+//                double longitude = tweetLocation.getLongitude();
+                double latitude = 5, longitude = 5;
                 String source = status.getSource();
                 Timestamp time = new Timestamp((status.getCreatedAt()).getTime());
                 WrapperParams params = new WrapperParams(source,wrapperParams.getTheme());

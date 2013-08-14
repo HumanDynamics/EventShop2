@@ -30,7 +30,7 @@ public class PointStream {
 		this.wrapperReference = wrapperReference;
 		
 		//TODO: is it wise to have this be a default? should there be a separate constructor? 
-		this.pointPollingTimeMS = 100;
+		this.pointPollingTimeMS = 500;
 		this.emagePointQueue = new ArrayList<STTPoint>();
 		this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
 	}
