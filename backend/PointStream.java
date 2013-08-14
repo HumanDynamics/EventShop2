@@ -4,13 +4,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/*
- * TODO: PointStream needs to keep two copies of the data from the wrapper, one is an iterator that is a queue for getNextPoint
- * The other should be an array or something that can be added to, and every time an emage is made, all of it's data is used and
- * it is reset.
- */
-
-
 public class PointStream {
 	
 	public final AbstractDataWrapper wrapperReference;
@@ -20,7 +13,7 @@ public class PointStream {
 	private Timestamp lastDataPullTime;
 	private Iterator<STTPoint> pointIterator;
 	private ArrayList<STTPoint> emagePointQueue;
-	
+	private ArrayList<STTPoint> mostRecentPoints;
 	
 	/**
 	 * PollingTime defaults to 100MS, can be set after instantiation
@@ -31,6 +24,7 @@ public class PointStream {
 		
 		//TODO: is it wise to have this be a default? should there be a separate constructor? 
 		this.pointPollingTimeMS = 500;
+		this.mostRecentPoints = new ArrayList<STTPoint>();
 		this.emagePointQueue = new ArrayList<STTPoint>();
 		this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
 	}
@@ -40,13 +34,9 @@ public class PointStream {
 		
 		if (timeSinceLastPull > this.pointPollingTimeMS) {
 			ArrayList<STTPoint> newData = this.wrapperReference.getWrappedData();
+			this.mostRecentPoints = newData;
 			this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
 			
-			//TODO: is this the right place to handle this? or should we find a way
-			// to ensure the wrapper never returns a null result
-			if (newData == null) {
-				return getNextPoint();
-			}
 			this.emagePointQueue.addAll(newData);
 			this.pointIterator = newData.iterator();
 			return getNextPoint();
@@ -65,13 +55,23 @@ public class PointStream {
 		}
 	}
 	
+	
+	/**
+	 * Access point for the front end to get the most recent STTPoints from the datasource
+	 * @return
+	 */
+	public ArrayList<STTPoint> getMostRecentPoints() {
+		ArrayList<STTPoint> output = new ArrayList<STTPoint>(this.mostRecentPoints);
+		return output;
+	}
+	
 	/**
 	 * Method to be called periodically to receive all of the new points since it's last invoking
 	 * Currently hard fails if the Wrapper isn't a GeoWrapper, as Emage will not be buildable
 	 * @param keepPointsAfter Points created after this time will be saved on the queue. Passing null empties the whole queue.
 	 * @return
 	 */
-	public Iterator<STTPoint> getPointsForEmage(Timestamp keepPointsAfter) {
+	protected Iterator<STTPoint> getPointsForEmage(Timestamp keepPointsAfter) {
 		
 		if (!(this.wrapperReference instanceof AbstractGeoWrapper)) {
 			throw new IllegalArgumentException();

@@ -15,6 +15,7 @@ public class EmageStream {
 	private Timestamp lastEmageCreationTime;
 	private long emagePollingTimeMS;
 	private Timestamp timeWindowStart, timeWindowEnd;
+	private Emage mostRecentEmage;
 	
 	/**
 	 * polling time defaults to 30000MS, can be set after instantiation
@@ -37,6 +38,7 @@ public class EmageStream {
 		Emage output;
 		if (timeSinceLastEmage > this.emagePollingTimeMS) {
 			output = this.emageBuilder.buildEmage(new Timestamp(0), new Timestamp(System.currentTimeMillis()));
+			this.mostRecentEmage = output;
 			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 		return output;
 		} else {
@@ -48,6 +50,10 @@ public class EmageStream {
 			}
 			return getNextEmage();
 		}
+	}
+	
+	public Emage getMostRecentEmage() {
+		return this.mostRecentEmage;
 	}
 	
 	public void setPollingTimeMS(long pollTimeMS) {
