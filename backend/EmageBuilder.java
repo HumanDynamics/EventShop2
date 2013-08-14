@@ -91,10 +91,6 @@ public class EmageBuilder {
 		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
 		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
 		
-		System.out.println(x_width);
-		System.out.println(y_width);
-		System.out.println("x,y ^^ gridsize");
-		
 		double[][] valueGrid = new double[x_width][y_width];
 		
 		if (operator.equals(Operator.MAX)) {
