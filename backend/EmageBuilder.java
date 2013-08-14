@@ -55,7 +55,7 @@ public class EmageBuilder {
 					valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
 					break;
 				case MIN:
-					valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
+					valueGrid[x][y] = Math.min(valueGrid[x][y], currPoint.getValue());
 					break;
 				case SUM:
 					valueGrid[x][y] += currPoint.getValue();
@@ -83,13 +83,17 @@ public class EmageBuilder {
 		double delta_x;
 		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude) {
 			//We've wrapped around from 180 to -180,
-			delta_x = 360-geoParams.geoBoundNW.longitude+geoParams.geoBoundSE.longitude;
+			delta_x = 360-(geoParams.geoBoundNW.longitude+geoParams.geoBoundSE.longitude);
 		} else {
 			delta_x = Math.abs(geoParams.geoBoundNW.longitude - geoParams.geoBoundSE.longitude);
 		}
 		
 		int x_width = (int) Math.round(delta_x/geoParams.geoResolutionX);
 		int y_width = (int) Math.round(delta_y/geoParams.geoResolutionY);
+		
+		System.out.println(x_width);
+		System.out.println(y_width);
+		System.out.println("x,y ^^ gridsize");
 		
 		double[][] valueGrid = new double[x_width][y_width];
 		

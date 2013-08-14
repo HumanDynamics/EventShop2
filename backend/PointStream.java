@@ -42,6 +42,11 @@ public class PointStream {
 			ArrayList<STTPoint> newData = this.wrapperReference.getWrappedData();
 			this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
 			
+			//TODO: is this the right place to handle this? or should we find a way
+			// to ensure the wrapper never returns a null result
+			if (newData == null) {
+				return getNextPoint();
+			}
 			this.emagePointQueue.addAll(newData);
 			this.pointIterator = newData.iterator();
 			return getNextPoint();

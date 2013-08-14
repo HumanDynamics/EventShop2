@@ -4,7 +4,7 @@ package backend;
 public class TestMain {
 
 	public static void main(String[] args) {		
-		final DataPipeline pipeline = buildNewPipeline(50,50,30,70,1,1,"Source","Theme", "TWITTER", "COUNT");
+		final DataPipeline pipeline = buildNewPipeline(3,-3,-3,3,1,1,"Source","Theme", "TWITTER", "COUNT");
 		
 		Thread pointThread = new Thread(new Runnable(){
 			@Override
@@ -30,22 +30,22 @@ public class TestMain {
 	}
 	
 	//TODO: this signature will change when this actually supports json, for now will use all primitives
-	private static DataPipeline buildNewPipeline(double NElat, double NElong, double SWlat, double SWlong,
+	private static DataPipeline buildNewPipeline(double NWlat, double NWlong, double SElat, double SElong,
 			double resolutionX, double resolutionY, String source, String theme, String wrapperType,
 			String operatorType) {
 		
-		LatLong boundingBoxNE = new LatLong(NElat, NElong);
-		LatLong boundingBoxSW = new LatLong(SWlat, SWlong);
+		LatLong boundingBoxNW = new LatLong(NWlat, NWlong);
+		LatLong boundingBoxSE = new LatLong(SElat, SElong);
 		
-		GeoParams geoParams = new GeoParams(resolutionX, resolutionY, boundingBoxNE, boundingBoxSW);
+		GeoParams geoParams = new GeoParams(resolutionX, resolutionY, boundingBoxNW, boundingBoxSE);
 		AuthFields authFields = new AuthFields("", "", "", "");
 		
 		WrapperParams wrapperParams = new WrapperParams(source, theme);
 		
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(wrapperType);
-		AbstractDataWrapper cw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
+		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		PointStream ps = new PointStream(cw);
+		PointStream ps = new PointStream(tw);
 		
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(operatorType));
 		EmageStream es = new EmageStream(eb);

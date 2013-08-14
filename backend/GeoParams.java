@@ -14,10 +14,10 @@ public class GeoParams {
 	 * @param geoBoundSW
 	 * @param geoBoundNE
 	 */
-	public GeoParams(double geoResolutionX, double geoResolutionY, LatLong geoBoundSW, LatLong geoBoundNE) {
+	public GeoParams(double geoResolutionX, double geoResolutionY, LatLong geoBoundNW, LatLong geoBoundSE) {
 		this.geoResolutionX = geoResolutionX;
 		this.geoResolutionY = geoResolutionY;
-		this.geoBoundSE = geoBoundSW;
-		this.geoBoundNW = geoBoundNE;
+		this.geoBoundSE = geoBoundSE;
+		this.geoBoundNW = geoBoundNW;
 	}
 }

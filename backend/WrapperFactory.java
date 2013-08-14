@@ -13,12 +13,16 @@ public class WrapperFactory {
 		switch (type) {
 			case TWITTER:
 				wrapper = new TwitterWrapper(wrapperParams, authFields, geoParams);
+				break;
 			case CSV:
 				wrapper = new CSVWrapper(wrapperParams, authFields, geoParams);
+				break;
 			case DATABASE:
 				wrapper = new DBWrapper(wrapperParams, authFields, geoParams);
+				break;
 			case PERSONALDATA:
 				//TODO: add personalDataWrapper here
+				break;
 		}
 		return wrapper;
 	}

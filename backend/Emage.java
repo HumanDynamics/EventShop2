@@ -1,6 +1,7 @@
  package backend;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 
 public class Emage {
 
@@ -36,5 +37,15 @@ public class Emage {
 	
 	public double[][] getValueGrid() {
 		return this.valueGrid;
+	}
+	
+	@Override
+	public String toString() {
+		String output = "Emage data grid: ";
+		
+		for (double[] array : this.valueGrid) {
+		   output = output + Arrays.toString(array)+ "\n";
+		}
+		return output;
 	}
 }
