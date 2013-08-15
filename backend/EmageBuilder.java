@@ -27,8 +27,12 @@ public class EmageBuilder {
 		MAX, MIN, SUM, COUNT, AVG
 	}
 	
-	/*
-	 * TODO: should we assume pointstream will always return something?
+	/**
+	 * Takes the most recent STTPoints from it's point stream, and aggregates them into
+	 * a value grid based on the operator its instantiated with
+	 * @param timeWindowStart Only points created after this Timestamp will be included
+	 * @param timeWindowEnd Only points created before this Timestamp will be included
+	 * @return
 	 */
 	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) {
 		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(null);
@@ -106,6 +110,11 @@ public class EmageBuilder {
 		return valueGrid;
 	}
 
+	/**
+	 * So sorry if you have to read this code. Probably another way to do this logic
+	 * but this was what made sense to me
+	 * @return index of the point in the grid, or -1 if it is outside of the grid
+	 */
 	private int getXIndex(GeoParams geoParams, STTPoint sttPoint) {
 		/*
 		 * TODO: what if it's outside the bounding box???) maybe in that case we should
@@ -115,14 +124,27 @@ public class EmageBuilder {
 		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude && 
 				geoParams.geoBoundNW.longitude > sttPoint.getLatLong().longitude) {
 			//Our point is wrapped around 180/-180
-			delta_x =  (180 - geoParams.geoBoundNW.longitude) + (180 + sttPoint.getLatLong().longitude);
+			if (geoParams.geoBoundSE.longitude > sttPoint.getLatLong().longitude) {
+				delta_x =  (180 - geoParams.geoBoundNW.longitude) + (180 + sttPoint.getLatLong().longitude);
+			} else {
+				//Outside of the bounding box
+				return -1;
+			}
 		} else {
+			if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude || 
+					geoParams.geoBoundSE.longitude < sttPoint.getLatLong().longitude) {
+				//Outside of the boudning box
+				return -1;
+			} else {
 			delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+			}
 		}
 		return (int) Math.round(delta_x/geoParams.geoResolutionX);
 	}
-	
-	//TODO: same issues as getXIndex
+
+	/**
+	 * @return index of the point in the grid, or -1 if it is outside of the grid
+	 */
 	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
 		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
 		return (int) Math.round(delta_y/geoParams.geoResolutionY);
