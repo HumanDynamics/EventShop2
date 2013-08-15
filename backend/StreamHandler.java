@@ -37,6 +37,24 @@ public class StreamHandler {
 	}
 	
 	/**
+	 * Access point for updating the polling frequency of a given pointstream
+	 * @param id identifier of the DataPipeline holding the desired pointstream (datasource)
+	 * @param newPollTimeMS value in Milleseconds the polling time will be set to
+	 */
+	public void setPointPollTimeByPipelineID(int id, int newPollTimeMS) {
+		this.dataPipelines.get(id).pointStream.setPollingTimeMS(newPollTimeMS);
+	}
+	
+	/**
+	 * Access point for updating the creation frequency of a given emagestream's emages
+	 * @param id identifier of the DataPipeline holding the desired emagestream (datasource)
+	 * @param newRateMS value in Milleseconds the creation emage rate will be set to
+	 */
+	public void setEmageCreationTimeByPipelineID(int id, int newRateMS) {
+		this.dataPipelines.get(id).pointStream.setPollingTimeMS(newRateMS);
+	}
+	
+	/**
 	 * Constructs a new data pipeline and adds it to our storage map indexed by it's ID, and then
 	 * Starts the PointStream and EmageStream instances on their own threads to start processing Data
 	 * @param json The json from the front end request used to create a new pipeline
