@@ -6,10 +6,19 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 
+/**
+ * Class that is effectively the outward facing API of the backend for the front end to hit
+ * for all desired operations.
+ * @author patrickmarx
+ *
+ */
 public class StreamHandler {
 
 	private Map<Integer, DataPipeline> dataPipelines;
 	
+	//TODO:
+	//TODO: How should we handle when the ID isn't in the map???
+	//TODO:
 	public StreamHandler() {
 		this.dataPipelines = new HashMap<Integer, DataPipeline>();
 	}
@@ -50,7 +59,7 @@ public class StreamHandler {
 	 * @param id identifier of the DataPipeline holding the desired emagestream (datasource)
 	 * @param newRateMS value in Milleseconds the creation emage rate will be set to
 	 */
-	public void setEmageCreationTimeByPipelineID(int id, int newRateMS) {
+	public void setEmageCreationRateByPipelineID(int id, int newRateMS) {
 		this.dataPipelines.get(id).pointStream.setPollingTimeMS(newRateMS);
 	}
 	
@@ -71,72 +80,10 @@ public class StreamHandler {
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
 		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		PointStream ps = new PointStream(tw);
+		PointStream ps = new PointStream(tw, request.pointPollingTimeMS);
 		
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(request.operatorType));
-		EmageStream es = new EmageStream(eb);
-		
-		//Add the pipeline to our collection by it's index so we can reaccess it
-		final DataPipeline p = new DataPipeline(ps, es);
-		this.dataPipelines.put(p.pipelineID, p);
-		
-		//Start the streams
-		Thread pointThread = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				while (true) {
-					System.out.println(p.pointStream.getNextPoint());
-				}
-			} 	
-		});	
-		Thread emageThread = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				while (true) {
-					System.out.println(p.emageStream.getNextEmage());
-				}
-			}
-		});
-		pointThread.start();
-		emageThread.start();
-		
-		return p.pipelineID;
-	}
-	
-	/**
-	 * Method left to make testing easier. Same as the json version of this
-	 * Constructs a new data pipeline and adds it to our storage map indexed by it's ID, and then
-	 * Starts the PointStream and EmageStream instances on their own threads to start processing Data
-	 * @param NWlat
-	 * @param NWlong
-	 * @param SElat
-	 * @param SElong
-	 * @param resolutionX
-	 * @param resolutionY
-	 * @param source
-	 * @param theme
-	 * @param wrapperType
-	 * @param operatorType
-	 * @return ID of the newly created pipeline
-	 */
-	protected int buildAndStartNewPipeline(double NWlat, double NWlong, double SElat, double SElong,
-			double resolutionX, double resolutionY, String source, String theme, String wrapperType,
-			String operatorType) {		
-		
-		LatLong boundingBoxNW = new LatLong(NWlat, NWlong);
-		LatLong boundingBoxSE = new LatLong(SElat, SElong);
-		
-		GeoParams geoParams = new GeoParams(resolutionX, resolutionY, boundingBoxNW, boundingBoxSE);
-		AuthFields authFields = new AuthFields("", "", "", "");
-		WrapperParams wrapperParams = new WrapperParams(source, theme);
-		
-		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(wrapperType);
-		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
-		
-		PointStream ps = new PointStream(tw);
-		
-		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(operatorType));
-		EmageStream es = new EmageStream(eb);
+		EmageStream es = new EmageStream(eb, request.emageCreationRateMS);
 		
 		//Add the pipeline to our collection by it's index so we can reaccess it
 		final DataPipeline p = new DataPipeline(ps, es);

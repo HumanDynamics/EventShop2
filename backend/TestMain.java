@@ -6,7 +6,6 @@ public class TestMain {
 	
 	public static void main(String[] args) throws InterruptedException {	
 		StreamHandler s = new StreamHandler();
-		//final int ID = s.buildAndStartNewPipeline(3,-3,-3,3,1,1,"Source","Theme", "TWITTER", "COUNT");
 		String json = "{'NWlat':'3',"
 				+ "'NWlong':'-3',"
 				+ "'SElat':'-3',"
@@ -16,7 +15,9 @@ public class TestMain {
 				+ "'source':'source',"
 				+ "'theme':'theme',"
 				+ "'wrapperType':'TWITTER',"
-				+ "'operatorType':'COUNT'}";
+				+ "'operatorType':'COUNT',"
+				+ "'pointPollingRateMS':'500',"
+				+ "'emageCreationRateMS':'7000'}";
 		Gson gson = new Gson();
 		GsonNewPipelineRequest request = gson.fromJson(json, GsonNewPipelineRequest.class);
 		

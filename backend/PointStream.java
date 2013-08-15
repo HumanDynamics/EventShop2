@@ -19,11 +19,9 @@ public class PointStream {
 	 * PollingTime defaults to 100MS, can be set after instantiation
 	 * @param wrapperReference
 	 */
-	public PointStream(AbstractDataWrapper wrapperReference) {
+	public PointStream(AbstractDataWrapper wrapperReference, int pointPollingTimeMS) {
 		this.wrapperReference = wrapperReference;
-		
-		//TODO: is it wise to have this be a default? should there be a separate constructor? 
-		this.pointPollingTimeMS = 500;
+		this.pointPollingTimeMS = pointPollingTimeMS;
 		this.mostRecentPoints = new ArrayList<STTPoint>();
 		this.emagePointQueue = new ArrayList<STTPoint>();
 		this.lastDataPullTime = new Timestamp(System.currentTimeMillis());
