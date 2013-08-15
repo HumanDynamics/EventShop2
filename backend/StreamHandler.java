@@ -1,11 +1,18 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
+
+import com.google.gson.Gson;
 
 public class StreamHandler {
 
-	private static Map<Integer, DataPipeline> dataPipelines;
+	private Map<Integer, DataPipeline> dataPipelines;
+	
+	public StreamHandler() {
+		this.dataPipelines = new HashMap<Integer, DataPipeline>();
+	}
 	
 	/**
 	 * Access point for the front end to get the most recent emage from
@@ -15,7 +22,7 @@ public class StreamHandler {
 	 */
 	public Emage getLatestEmageByPipelineID(int id) {
 		//TODO: Probably need some sort of access control here or earlier
-		return dataPipelines.get(id).emageStream.getMostRecentEmage();
+		return this.dataPipelines.get(id).emageStream.getMostRecentEmage();
 	}
 		
 	/**
@@ -26,11 +33,60 @@ public class StreamHandler {
 	 */
 	public ArrayList<STTPoint> getLatestPointsByPipelineID(int id) {
 		//TODO: probably need some sort of access control here or earlier
-		return dataPipelines.get(id).pointStream.getMostRecentPoints();
+		return this.dataPipelines.get(id).pointStream.getMostRecentPoints();
 	}
 	
 	/**
-	 * TODO: consolidate all these arguments into one json object
+	 * Constructs a new data pipeline and adds it to our storage map indexed by it's ID, and then
+	 * Starts the PointStream and EmageStream instances on their own threads to start processing Data
+	 * @param json The json from the front end request used to create a new pipeline
+	 * @return the int ID of the newly created pipeline
+	 */
+	protected int buildAndStartNewPipeline(GsonNewPipelineRequest request) {		
+		LatLong boundingBoxNW = new LatLong(request.NWlat, request.NWlong);
+		LatLong boundingBoxSE = new LatLong(request.SElat, request.SElong);
+		
+		GeoParams geoParams = new GeoParams(request.resolutionX, request.resolutionY, boundingBoxNW, boundingBoxSE);
+		AuthFields authFields = new AuthFields("", "", "", "");
+		WrapperParams wrapperParams = new WrapperParams(request.source, request.theme);
+		
+		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
+		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
+		
+		PointStream ps = new PointStream(tw);
+		
+		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(request.operatorType));
+		EmageStream es = new EmageStream(eb);
+		
+		//Add the pipeline to our collection by it's index so we can reaccess it
+		final DataPipeline p = new DataPipeline(ps, es);
+		this.dataPipelines.put(p.pipelineID, p);
+		
+		//Start the streams
+		Thread pointThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					System.out.println(p.pointStream.getNextPoint());
+				}
+			} 	
+		});	
+		Thread emageThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					System.out.println(p.emageStream.getNextEmage());
+				}
+			}
+		});
+		pointThread.start();
+		emageThread.start();
+		
+		return p.pipelineID;
+	}
+	
+	/**
+	 * Method left to make testing easier. Same as the json version of this
 	 * Constructs a new data pipeline and adds it to our storage map indexed by it's ID, and then
 	 * Starts the PointStream and EmageStream instances on their own threads to start processing Data
 	 * @param NWlat
@@ -47,7 +103,7 @@ public class StreamHandler {
 	 */
 	protected int buildAndStartNewPipeline(double NWlat, double NWlong, double SElat, double SElong,
 			double resolutionX, double resolutionY, String source, String theme, String wrapperType,
-			String operatorType) {
+			String operatorType) {		
 		
 		LatLong boundingBoxNW = new LatLong(NWlat, NWlong);
 		LatLong boundingBoxSE = new LatLong(SElat, SElong);
@@ -66,7 +122,7 @@ public class StreamHandler {
 		
 		//Add the pipeline to our collection by it's index so we can reaccess it
 		final DataPipeline p = new DataPipeline(ps, es);
-		dataPipelines.put(p.pipelineID, p);
+		this.dataPipelines.put(p.pipelineID, p);
 		
 		//Start the streams
 		Thread pointThread = new Thread(new Runnable(){
