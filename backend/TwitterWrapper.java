@@ -36,10 +36,11 @@ public class TwitterWrapper extends AbstractGeoWrapper {
             public void onStatus(Status status) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 GeoLocation tweetLocation=status.getGeoLocation();
-//                double latitude = tweetLocation.getLatitude();
-//                double longitude = tweetLocation.getLongitude();
-                double latitude = 1;
-                double longitude = 1;
+                //make sure to deal with issue about GeoLocation tracking... Places?
+                double latitude = tweetLocation.getLatitude();
+                double longitude = tweetLocation.getLongitude();
+                //double latitude = 1;
+                //double longitude = 1;
                 String source = status.getSource();
                 Timestamp time = new Timestamp((status.getCreatedAt()).getTime());
                 WrapperParams params = new WrapperParams(source,wrapperParams.getTheme());
@@ -85,5 +86,5 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 	    pointList.clear();
 	    return newList;
 	}
-
+	
 }

@@ -22,4 +22,7 @@ public class WrapperParams {
 	public String getTheme(){
 	    return this.theme;
 	}
+	public String toString(){
+	    return "Source: "+this.source+"\n Theme: "+this.theme;
+	}
 }

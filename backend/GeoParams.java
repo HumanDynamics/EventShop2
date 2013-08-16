@@ -20,4 +20,8 @@ public class GeoParams {
 		this.geoBoundSE = geoBoundSE;
 		this.geoBoundNW = geoBoundNW;
 	}
+	public String toString(){
+	    return "SouthEast Bound: "+this.geoBoundSE.toString()+", NorthWest Bound: "+this.geoBoundNW.toString()+
+	            ", GeoResolution (X,Y): ("+this.geoResolutionX+","+this.geoResolutionY+")";
+	}
 }
