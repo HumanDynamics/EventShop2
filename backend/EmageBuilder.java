@@ -1,6 +1,7 @@
 package backend;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Arrays;
 
@@ -8,10 +9,12 @@ public class EmageBuilder {
 	
 	private final PointStream pointStream;
 	private final Operator operator;
+	private ArrayList<STTPoint> pointQueue;
 	
 	public EmageBuilder(PointStream pointStream, Operator operator) {
 		this.pointStream = pointStream;
 		this.operator = operator;
+		this.pointQueue = new ArrayList<STTPoint>();
 	}
 		
 	/**
@@ -34,8 +37,15 @@ public class EmageBuilder {
 	 * @param timeWindowEnd Only points created before this Timestamp will be included
 	 * @return
 	 */
-	public Emage buildEmage(Timestamp timeWindowStart, Timestamp timeWindowEnd) {
-		Iterator<STTPoint> pointIterator = this.pointStream.getPointsForEmage(null);
+
+	public Emage buildEmage(Timestamp timeWindowStart, long windowSizeMS) {
+		
+		this.pointQueue.addAll(this.pointStream.getAndClearNewPointsQueue());
+		Iterator<STTPoint> pointIterator = this.pointQueue.iterator();
+		
+		//TODO: This needs to change to allow for a rolling window
+		this.pointQueue = new ArrayList<STTPoint>();
+		
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
@@ -47,8 +57,7 @@ public class EmageBuilder {
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
 			
-			boolean isWithinTimeWindow = currPoint.getCreationTime().before(timeWindowEnd) &&
-					currPoint.getCreationTime().after(timeWindowStart);
+			boolean isWithinTimeWindow = currPoint.getCreationTime().after(timeWindowStart);
 			
 			if (isWithinTimeWindow) {	
 				int x = getXIndex(geoParams, currPoint);
@@ -75,7 +84,7 @@ public class EmageBuilder {
 				}
 			}
 		}
-		return new Emage(valueGrid, timeWindowStart, timeWindowEnd, this.pointStream.getAuthFields(), 
+		return new Emage(valueGrid, timeWindowStart, new Timestamp(System.currentTimeMillis()), this.pointStream.getAuthFields(), 
 				this.pointStream.getWrapperParams(), geoParams);
 	}
 	
@@ -148,5 +157,20 @@ public class EmageBuilder {
 	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
 		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
 		return (int) Math.round(delta_y/geoParams.geoResolutionY);
+	}
+	
+	/**
+	 * Helper method for enabling a rolling time window. Returns an array of all
+	 * the points that were created after a certain time
+	 * TODO: is there a more efficient way of doing this? does it matter?
+	 */
+	private ArrayList<STTPoint> clearNonWindowPoints(ArrayList<STTPoint> list, Timestamp keepPointsAfter) {
+		ArrayList<STTPoint> output = new ArrayList<STTPoint>();
+		for (int i=0;i<list.size();i++){
+			if (keepPointsAfter.before(list.get(i).getCreationTime())) {
+				output.add(list.get(i));
+			}
+		}
+		return output;
 	}
 }

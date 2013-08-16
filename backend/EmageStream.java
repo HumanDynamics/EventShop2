@@ -29,7 +29,7 @@ public class EmageStream {
 		long timeSinceLastEmage = System.currentTimeMillis() - this.lastEmageCreationTime.getTime();
 		Emage output;
 		if (timeSinceLastEmage > this.emageCreationRateMS) {
-			output = this.emageBuilder.buildEmage(new Timestamp(0), new Timestamp(System.currentTimeMillis()));
+			output = this.emageBuilder.buildEmage(new Timestamp(0), emageCreationRateMS);
 			this.mostRecentEmage = output;
 			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 		return output;
