@@ -26,9 +26,7 @@ public class LatLong {
 		this.longitude = longitude;
 	}
 	
-	public String toString(){
-	    if (this.latitude!=null&&this.longitude!=null){
-	        return Double.toString(this.latitude)+","+Double.toString(this.longitude);
-	    }
+	public String toString() {
+		return Double.toString(this.latitude)+","+Double.toString(this.longitude);
 	}
 }

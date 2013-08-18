@@ -23,7 +23,7 @@ public class STTPoint {
 	
 	public String toString(){
 	    String output = "UID: "+this.uid+"\n Location: "+this.latLong.toString()+"\n Value: "+
-	    this.value+"\n Pull Time: "+this.pullTime.toString()+"\n Creation Time: "+this.localCreationTime.toString()+"\n "
+	    this.value+"\n Pull Time: "+this.pullTime.toString()+"\n Creation Time: "+this.localCreationTime.toString()+"\n ";
 	    this.wrapperParams.toString();
 	    return output;
 	}

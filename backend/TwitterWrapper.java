@@ -2,7 +2,9 @@ package backend;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+
 import twitter4j.FilterQuery;
+import twitter4j.Place;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
