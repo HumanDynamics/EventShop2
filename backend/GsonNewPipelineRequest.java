@@ -18,6 +18,7 @@ public class GsonNewPipelineRequest {
 	public String operatorType;
 	public int pointPollingTimeMS;
 	public int emageCreationRateMS;
+	public int emageWindowLength;
 	
 	public GsonNewPipelineRequest() {
 	}

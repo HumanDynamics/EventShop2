@@ -8,17 +8,12 @@ public class PointStream {
 	
 	public final AbstractDataWrapper wrapperReference;
 	
-	//TODO: This is how often we call getWrappedData() periodically
 	private long pointPollingTimeMS;
 	private Timestamp lastDataPullTime;
 	private Iterator<STTPoint> pointIterator;
 	private ArrayList<STTPoint> emagePointQueue;
 	private ArrayList<STTPoint> mostRecentPoints;
 	
-	/**
-	 * PollingTime defaults to 100MS, can be set after instantiation
-	 * @param wrapperReference
-	 */
 	public PointStream(AbstractDataWrapper wrapperReference, int pointPollingTimeMS) {
 		this.wrapperReference = wrapperReference;
 		this.pointPollingTimeMS = pointPollingTimeMS;

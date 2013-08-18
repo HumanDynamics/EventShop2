@@ -6,19 +6,18 @@ public class EmageStream {
 	private EmageBuilder emageBuilder;
 	private Timestamp lastEmageCreationTime;
 	private long emageCreationRateMS;
-	
-	//TODO: do we even need these here? how do we get them?
-	private Timestamp timeWindowStart, timeWindowEnd;
+	private long windowLength;
 	private Emage mostRecentEmage;
 	
 	/**
-	 * polling time defaults to 30000MS, can be set after instantiation
 	 * @param emageBuilder
+	 * @param emageCreationRateMS
 	 */
-	public EmageStream(EmageBuilder emageBuilder, int emageCreationRateMS) {
+	public EmageStream(EmageBuilder emageBuilder, int emageCreationRateMS, long windowLength) {
 		this.emageBuilder = emageBuilder;
 		this.emageCreationRateMS = emageCreationRateMS;
 		this.lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
+		this.windowLength = windowLength;
 	}
 
 	/**
@@ -29,7 +28,7 @@ public class EmageStream {
 		long timeSinceLastEmage = System.currentTimeMillis() - this.lastEmageCreationTime.getTime();
 		Emage output;
 		if (timeSinceLastEmage > this.emageCreationRateMS) {
-			output = this.emageBuilder.buildEmage(new Timestamp(0), emageCreationRateMS);
+			output = this.emageBuilder.buildEmage(lastEmageCreationTime, windowLength);
 			this.mostRecentEmage = output;
 			lastEmageCreationTime = new Timestamp(System.currentTimeMillis());
 		return output;

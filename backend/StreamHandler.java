@@ -16,9 +16,6 @@ public class StreamHandler {
 
 	private Map<Integer, DataPipeline> dataPipelines;
 	
-	//TODO:
-	//TODO: How should we handle when the ID isn't in the map???
-	//TODO:
 	public StreamHandler() {
 		this.dataPipelines = new HashMap<Integer, DataPipeline>();
 	}
@@ -28,10 +25,17 @@ public class StreamHandler {
 	 * a specific datasource
 	 * @param id The ID of the datapipeline of the datasource to pull the most recent emage from
 	 * @return
+	 * @throws Exception 
 	 */
-	public Emage getLatestEmageByPipelineID(int id) {
+	public Emage getLatestEmageByPipelineID(int id) throws Exception {
 		//TODO: Probably need some sort of access control here or earlier
-		return this.dataPipelines.get(id).emageStream.getMostRecentEmage();
+		DataPipeline dp = this.dataPipelines.get(id);
+		if (dp != null) {
+			return dp.emageStream.getMostRecentEmage();
+		} else {
+			throw new Exception();
+		}
+		
 	}
 		
 	/**
@@ -39,34 +43,52 @@ public class StreamHandler {
 	 * a specific datasource
 	 * @param id The ID of the datapipeline of the datasource to pull the most recent points from
 	 * @return
+	 * @throws Exception 
 	 */
-	public ArrayList<STTPoint> getLatestPointsByPipelineID(int id) {
+	public ArrayList<STTPoint> getLatestPointsByPipelineID(int id) throws Exception {
 		//TODO: probably need some sort of access control here or earlier
-		return this.dataPipelines.get(id).pointStream.getMostRecentPoints();
+		DataPipeline dp = this.dataPipelines.get(id);
+		if (dp != null) {
+			return dp.pointStream.getMostRecentPoints();
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	/**
 	 * Access point for updating the polling frequency of a given pointstream
 	 * @param id identifier of the DataPipeline holding the desired pointstream (datasource)
 	 * @param newPollTimeMS value in Milleseconds the polling time will be set to
+	 * @throws Exception 
 	 */
-	public void setPointPollTimeByPipelineID(int id, int newPollTimeMS) {
-		this.dataPipelines.get(id).pointStream.setPollingTimeMS(newPollTimeMS);
+	public void setPointPollTimeByPipelineID(int id, int newPollTimeMS) throws Exception {
+		DataPipeline dp = this.dataPipelines.get(id);
+		if (dp != null) {
+			dp.pointStream.setPollingTimeMS(newPollTimeMS);
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	/**
 	 * Access point for updating the creation frequency of a given emagestream's emages
 	 * @param id identifier of the DataPipeline holding the desired emagestream (datasource)
 	 * @param newRateMS value in Milleseconds the creation emage rate will be set to
+	 * @throws Exception 
 	 */
-	public void setEmageCreationRateByPipelineID(int id, int newRateMS) {
-		this.dataPipelines.get(id).pointStream.setPollingTimeMS(newRateMS);
+	public void setEmageCreationRateByPipelineID(int id, int newRateMS) throws Exception {
+		DataPipeline dp = this.dataPipelines.get(id);
+		if (dp != null) {
+			dp.pointStream.setPollingTimeMS(newRateMS);
+		} else {
+			throw new Exception();
+		}
 	}
 	
 	/**
 	 * Constructs a new data pipeline and adds it to our storage map indexed by it's ID, and then
 	 * Starts the PointStream and EmageStream instances on their own threads to start processing Data
-	 * @param json The json from the front end request used to create a new pipeline
+	 * @param json The json object from the front end request used to create a new pipeline
 	 * @return the int ID of the newly created pipeline
 	 */
 	protected int buildAndStartNewPipeline(GsonNewPipelineRequest request) {		
@@ -83,7 +105,7 @@ public class StreamHandler {
 		PointStream ps = new PointStream(tw, request.pointPollingTimeMS);
 		
 		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(request.operatorType));
-		EmageStream es = new EmageStream(eb, request.emageCreationRateMS);
+		EmageStream es = new EmageStream(eb, request.emageCreationRateMS, request.emageWindowLength);
 		
 		//Add the pipeline to our collection by it's index so we can reaccess it
 		final DataPipeline p = new DataPipeline(ps, es);

@@ -17,7 +17,8 @@ public class TestMain {
 				+ "'wrapperType':'TWITTER',"
 				+ "'operatorType':'COUNT',"
 				+ "'pointPollingRateMS':'500',"
-				+ "'emageCreationRateMS':'7000'}";
+				+ "'emageCreationRateMS':'7000',"
+				+ "'emageWindowLength':'0'}";
 		Gson gson = new Gson();
 		GsonNewPipelineRequest request = gson.fromJson(json, GsonNewPipelineRequest.class);
 		
@@ -26,7 +27,13 @@ public class TestMain {
 		Thread.sleep(16000);
 		
 		System.out.println("MOST RECENT EMAGE FROM PIPELINE 0:");
-		Emage recentEmage = s.getLatestEmageByPipelineID(0);
+		Emage recentEmage = null;
+		try {
+			recentEmage = s.getLatestEmageByPipelineID(0);
+		} catch (Exception e) {
+			System.out.println("Pipeline with ID 0 does not exist");
+			e.printStackTrace();
+		}
 		System.out.println(recentEmage);
 	}
 }

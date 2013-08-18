@@ -34,17 +34,19 @@ public class EmageBuilder {
 	 * Takes the most recent STTPoints from it's point stream, and aggregates them into
 	 * a value grid based on the operator its instantiated with
 	 * @param timeWindowStart Only points created after this Timestamp will be included
-	 * @param timeWindowEnd Only points created before this Timestamp will be included
+	 * @param windowSizeMS 
 	 * @return
 	 */
-
-	public Emage buildEmage(Timestamp timeWindowStart, long windowSizeMS) {
+	/*
+	 * Change this to use the last emage creation time and then just update based on the window size
+	 * if the window is 0 that means we have no window and just remove all the points
+	 */
+	public Emage buildEmage(Timestamp lastEmageCreationTime, long windowSizeMS) {
 		
-		this.pointQueue.addAll(this.pointStream.getAndClearNewPointsQueue());
+		filterPointQueueByWindow(windowSizeMS);
+		
+		this.pointQueue.addAll(this.pointStream.getAndClearNewPointsQueue());		
 		Iterator<STTPoint> pointIterator = this.pointQueue.iterator();
-		
-		//TODO: This needs to change to allow for a rolling window
-		this.pointQueue = new ArrayList<STTPoint>();
 		
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
@@ -57,12 +59,10 @@ public class EmageBuilder {
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
 			
-			boolean isWithinTimeWindow = currPoint.getCreationTime().after(timeWindowStart);
+			int x = getXIndex(geoParams, currPoint);
+			int y = getYIndex(geoParams, currPoint);
 			
-			if (isWithinTimeWindow) {	
-				int x = getXIndex(geoParams, currPoint);
-				int y = getYIndex(geoParams, currPoint);
-				
+			if (x>=0 && y >=0) {
 				switch (this.operator) {
 				case MAX:
 					valueGrid[x][y] = Math.max(valueGrid[x][y], currPoint.getValue());
@@ -84,10 +84,10 @@ public class EmageBuilder {
 				}
 			}
 		}
-		return new Emage(valueGrid, timeWindowStart, new Timestamp(System.currentTimeMillis()), this.pointStream.getAuthFields(), 
+		return new Emage(valueGrid, lastEmageCreationTime, new Timestamp(System.currentTimeMillis()), this.pointStream.getAuthFields(), 
 				this.pointStream.getWrapperParams(), geoParams);
 	}
-	
+
 	/*
 	 * Assumes well formed bounding box, takes the absolute value of the differences.
 	 */
@@ -155,6 +155,11 @@ public class EmageBuilder {
 	 * @return index of the point in the grid, or -1 if it is outside of the grid
 	 */
 	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
+		boolean insideBox = sttPoint.getLatLong().latitude > geoParams.geoBoundNW.latitude ||
+				sttPoint.getLatLong().latitude < geoParams.geoBoundSE.latitude;
+		
+		if (!insideBox) return -1;
+		
 		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
 		return (int) Math.round(delta_y/geoParams.geoResolutionY);
 	}
@@ -164,13 +169,14 @@ public class EmageBuilder {
 	 * the points that were created after a certain time
 	 * TODO: is there a more efficient way of doing this? does it matter?
 	 */
-	private ArrayList<STTPoint> clearNonWindowPoints(ArrayList<STTPoint> list, Timestamp keepPointsAfter) {
+	private void filterPointQueueByWindow(long windowLength) {
 		ArrayList<STTPoint> output = new ArrayList<STTPoint>();
-		for (int i=0;i<list.size();i++){
-			if (keepPointsAfter.before(list.get(i).getCreationTime())) {
-				output.add(list.get(i));
+		Timestamp keepAfter = new Timestamp(System.currentTimeMillis()-windowLength);
+		for (int i=0;i<pointQueue.size();i++){
+			if (keepAfter.before(pointQueue.get(i).getCreationTime())) {
+				output.add(pointQueue.get(i));
 			}
 		}
-		return output;
+		this.pointQueue = output;
 	}
 }

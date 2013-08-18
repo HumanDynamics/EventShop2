@@ -12,12 +12,6 @@ public class STTPoint {
 	private final Timestamp localCreationTime;
 	private final Timestamp pullTime;
 	
-	/**
-	 * @param wrapperParams
-	 * @param value
-	 * @param latitude
-	 * @param longitude
-	 */
 	public STTPoint(double value, Timestamp pullTime, LatLong latLong, WrapperParams wrapperParams) {
 		this.uid = uidCounter++;
 		this.value = value;
