@@ -41,11 +41,14 @@ public class Emage {
 	
 	@Override
 	public String toString() {
-		String output = "Emage data grid: ";
+		String grid = "Emage data grid: \n";
 		
 		for (double[] array : this.valueGrid) {
-		   output = output + Arrays.toString(array)+ "\n";
+		   grid = grid + Arrays.toString(array)+ "\n";
 		}
-		return output;
+		String rest = "EmageUID: "+this.emageUID+"\n Time Window Beginning: "+this.timeWindowStart.toString()+
+		              "\n Time Window End: "+this.timeWindowEnd.toString()+"\n "+this.wrapperParams.toString()+
+		              "\n "+this.geoParams.toString();
+		return grid+rest;
 	}
 }

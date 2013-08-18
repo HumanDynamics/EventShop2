@@ -25,4 +25,10 @@ public class LatLong {
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
+	
+	public String toString(){
+	    if (this.latitude!=null&&this.longitude!=null){
+	        return Double.toString(this.latitude)+","+Double.toString(this.longitude);
+	    }
+	}
 }
