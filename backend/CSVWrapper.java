@@ -23,13 +23,6 @@ public class CSVWrapper extends AbstractGeoWrapper {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	/* 
-	 * TODO: This looks like it just grabs the whole file every time, should we be concerned about getting
-	 * Repeat data, or reading the same points twice? For example what if only half the doc is updated but
-	 * we pull all of it
-	 */
-	
 	@Override
 	public ArrayList<STTPoint> getWrappedData() {
 	    ArrayList<STTPoint> pointList = new ArrayList<STTPoint>();
