@@ -12,7 +12,6 @@ public class Emage {
 	private final GeoParams geoParams;
 	private AuthFields authFields;
 	
-	//TODO: should we worry about overflow here?
 	private static long emageUIDCount = 0; 
 	
 	

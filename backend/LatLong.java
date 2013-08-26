@@ -4,7 +4,6 @@ package backend;
 /**
  * Class to keep lat/long's more organized, and allow for possibility of helper methods
  * @author patrickmarx
- *
  */
 public class LatLong {
 

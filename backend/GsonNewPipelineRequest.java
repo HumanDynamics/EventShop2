@@ -1,5 +1,7 @@
 package backend;
 
+import java.sql.Timestamp;
+
 /**
  * Class used by Gson to create a java object from a new-data-json-request 
  * @author patrickmarx
@@ -19,6 +21,12 @@ public class GsonNewPipelineRequest {
 	public int pointPollingTimeMS;
 	public int emageCreationRateMS;
 	public int emageWindowLength;
+	
+	//Variables for use in DBWrapper, otherwise null
+	public Timestamp DBstartTime;
+	public Timestamp DBendTime;
+	public Long DBactiveTimeWindowMS;
+	public Long DBrefreshRegenerationRateMS;
 	
 	public GsonNewPipelineRequest() {
 	}

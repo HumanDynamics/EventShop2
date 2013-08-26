@@ -37,10 +37,6 @@ public class EmageBuilder {
 	 * @param windowSizeMS 
 	 * @return
 	 */
-	/*
-	 * Change this to use the last emage creation time and then just update based on the window size
-	 * if the window is 0 that means we have no window and just remove all the points
-	 */
 	public Emage buildEmage(Timestamp lastEmageCreationTime, long windowSizeMS) {
 		
 		filterPointQueueByWindow(windowSizeMS);
@@ -125,10 +121,7 @@ public class EmageBuilder {
 	 * @return index of the point in the grid, or -1 if it is outside of the grid
 	 */
 	private int getXIndex(GeoParams geoParams, STTPoint sttPoint) {
-		/*
-		 * TODO: what if it's outside the bounding box???) maybe in that case we should
-		 *  just throw it out?
-		 */
+
 		double delta_x;
 		if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude && 
 				geoParams.geoBoundNW.longitude > sttPoint.getLatLong().longitude) {
@@ -142,7 +135,7 @@ public class EmageBuilder {
 		} else {
 			if (geoParams.geoBoundNW.longitude > geoParams.geoBoundSE.longitude || 
 					geoParams.geoBoundSE.longitude < sttPoint.getLatLong().longitude) {
-				//Outside of the boudning box
+				//Outside of the bounding box
 				return -1;
 			} else {
 			delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);

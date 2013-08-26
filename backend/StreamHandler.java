@@ -111,7 +111,7 @@ public class StreamHandler {
 		final DataPipeline p = new DataPipeline(ps, es);
 		this.dataPipelines.put(p.pipelineID, p);
 		
-		//Start the streams
+		//Create the threads and Start the streams
 		Thread pointThread = new Thread(new Runnable(){
 			@Override
 			public void run() {

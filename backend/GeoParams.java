@@ -2,7 +2,7 @@ package backend;
 
 public class GeoParams {
 
-	//TODO: THIS IS HOW LARGE A CELL IS, IN UNITS OF lat/long
+	//THIS IS HOW LARGE A CELL IS, IN UNITS OF lat/long
 	public final double geoResolutionX;
 	public final double geoResolutionY;
 	

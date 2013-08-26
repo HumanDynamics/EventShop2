@@ -6,7 +6,7 @@ public class TestMain {
 	
 	public static void main(String[] args) throws InterruptedException {	
 		StreamHandler s = new StreamHandler();
-		String json = "{'NWlat':'3',"
+		String twitter_json = "{'NWlat':'3',"
 				+ "'NWlong':'-3',"
 				+ "'SElat':'-3',"
 				+ "'SElong':'3',"
@@ -19,10 +19,9 @@ public class TestMain {
 				+ "'pointPollingRateMS':'500',"
 				+ "'emageCreationRateMS':'7000',"
 				+ "'emageWindowLength':'0'}";
-		Gson gson = new Gson();
-		GsonNewPipelineRequest request = gson.fromJson(json, GsonNewPipelineRequest.class);
+		FrontEndLiason liason = new FrontEndLiason(s);
 		
-		final int ID = s.buildAndStartNewPipeline(request);
+		final String response = liason.newDataPipeline(twitter_json);
 		
 		Thread.sleep(16000);
 		
