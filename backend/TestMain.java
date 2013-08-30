@@ -18,7 +18,11 @@ public class TestMain {
 				+ "'operatorType':'COUNT',"
 				+ "'pointPollingRateMS':'500',"
 				+ "'emageCreationRateMS':'7000',"
-				+ "'emageWindowLength':'0'}";
+				+ "'emageWindowLength':'0',"
+				+ "'oauthAccessToken':'HbzFVHFA5NGqcXgGfn2w',"
+				+ "'oauthAccessTokenSecret':'VPtqjXE0WQeQI0ao0FFMhR3wshaD8rLIZN3bfPGslE',"
+				+ "'oauthConsumerKey':'24302602-Fuukj26lTLqQcAASJyQa3MlgrcXhml0J6eGHSFOPx',"
+				+ "'oauthConsumerKeySecret':'vwlI15Hx1rfz5GHLLh7OQhjGS8eKxK8jclezN8vXoo'}";
 		FrontEndLiason liason = new FrontEndLiason(s);
 		
 		final String response = liason.newDataPipeline(twitter_json);

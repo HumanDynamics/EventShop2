@@ -29,10 +29,10 @@ public class TwitterWrapper extends AbstractGeoWrapper {
         query.track(new String[]{wrapperParams.getTheme()});
         //query.locations(locations);
         TwitterStream twitterStream= new TwitterStreamFactory().getInstance();
-        //twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));
-        twitterStream.setOAuthConsumer("HbzFVHFA5NGqcXgGfn2w", "VPtqjXE0WQeQI0ao0FFMhR3wshaD8rLIZN3bfPGslE"); //hardcoded (this is my Twitter that I never use(d))
-        //twitterStream.setOAuthConsumer(authFields.getConsumerKey(),authFields.getConsumerKeySecret());
-        twitterStream.setOAuthAccessToken(new AccessToken("24302602-Fuukj26lTLqQcAASJyQa3MlgrcXhml0J6eGHSFOPx", "vwlI15Hx1rfz5GHLLh7OQhjGS8eKxK8jclezN8vXoo")); //hardcoded (this is my Twitter that I never use(d))
+        twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));
+        //twitterStream.setOAuthConsumer("HbzFVHFA5NGqcXgGfn2w", "VPtqjXE0WQeQI0ao0FFMhR3wshaD8rLIZN3bfPGslE"); //hardcoded (this is my Twitter that I never use(d))
+        twitterStream.setOAuthConsumer(authFields.getConsumerKey(),authFields.getConsumerKeySecret());
+        //twitterStream.setOAuthAccessToken(new AccessToken("24302602-Fuukj26lTLqQcAASJyQa3MlgrcXhml0J6eGHSFOPx", "vwlI15Hx1rfz5GHLLh7OQhjGS8eKxK8jclezN8vXoo")); //hardcoded (this is my Twitter that I never use(d))
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {

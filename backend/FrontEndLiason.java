@@ -7,6 +7,8 @@ public class FrontEndLiason {
 	private Gson gson;
 	private StreamHandler streamHandler;
 	
+	private static final String BAD_REQUEST_MSG = "BAD REQUEST";
+	
 	public FrontEndLiason(StreamHandler streamHandler) {
 		this.gson = new Gson();
 		this.streamHandler = streamHandler;
@@ -25,12 +27,19 @@ public class FrontEndLiason {
 		GsonNewPipelineRequest request = gson.fromJson(json, GsonNewPipelineRequest.class);
 		
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
-		if (type == WrapperFactory.WrapperType.DATABASE) {
+		if (type.equals(WrapperFactory.WrapperType.DATABASE)) {
 			if (request.DBstartTime == null || 
 					request.DBendTime == null ||
 					request.DBactiveTimeWindowMS == null ||
 					request.DBrefreshRegenerationRateMS == null) {
-				return "{Whatever the hell we want to say if it's missing fields}";
+				return BAD_REQUEST_MSG;
+			}
+		} else if (type.equals(WrapperFactory.WrapperType.TWITTER)) {
+			if (request.oauthAccessToken == null ||
+					request.oauthAccessTokenSecret == null ||
+					request.oauthConsumerKey == null ||
+					request.oauthConsumerKeySecret == null) {
+				return BAD_REQUEST_MSG;
 			}
 		}
 		

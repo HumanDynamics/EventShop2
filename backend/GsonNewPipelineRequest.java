@@ -28,6 +28,12 @@ public class GsonNewPipelineRequest {
 	public Long DBactiveTimeWindowMS;
 	public Long DBrefreshRegenerationRateMS;
 	
+	public String oauthAccessToken;
+	public String oauthAccessTokenSecret;
+	public String oauthConsumerKey;
+	public String oauthConsumerKeySecret;
+	
+	
 	public GsonNewPipelineRequest() {
 	}
 }

@@ -96,7 +96,11 @@ public class StreamHandler {
 		LatLong boundingBoxSE = new LatLong(request.SElat, request.SElong);
 		
 		GeoParams geoParams = new GeoParams(request.resolutionX, request.resolutionY, boundingBoxNW, boundingBoxSE);
-		AuthFields authFields = new AuthFields("", "", "", "");
+		AuthFields authFields = new AuthFields(
+				request.oauthAccessToken, 
+				request.oauthAccessTokenSecret, 
+				request.oauthConsumerKey, 
+				request.oauthConsumerKeySecret);
 		WrapperParams wrapperParams = new WrapperParams(request.source, request.theme);
 		
 		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
