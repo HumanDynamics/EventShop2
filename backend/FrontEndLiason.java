@@ -43,7 +43,7 @@ public class FrontEndLiason {
 			}
 		}
 		
-		int id = this.streamHandler.buildAndStartNewPipeline(request);
+		int id = this.streamHandler.buildAndStartNewPipelineFromGson(request);
 		return "{success: true, pipelineID:" +id+"}";
 	}
 	

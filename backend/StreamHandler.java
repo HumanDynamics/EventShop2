@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 public class StreamHandler {
 
 	private Map<Integer, DataPipeline> dataPipelines;
+	public static int currentPipelineCount = 0;
 	
 	public StreamHandler() {
 		this.dataPipelines = new HashMap<Integer, DataPipeline>();
@@ -91,25 +92,28 @@ public class StreamHandler {
 	 * @param json The json object from the front end request used to create a new pipeline
 	 * @return the int ID of the newly created pipeline
 	 */
-	protected int buildAndStartNewPipeline(GsonNewPipelineRequest request) {		
-		LatLong boundingBoxNW = new LatLong(request.NWlat, request.NWlong);
-		LatLong boundingBoxSE = new LatLong(request.SElat, request.SElong);
+	public int buildAndStartNewPipeline(double NWlat, double NWlong, double SElat, double SElong,
+			double resolutionX, double resolutionY, String source, String theme, String wrapperType, 
+			String operatorType, int pointPollingTimeMS, int emageCreationTimeMS, int emageWindowLength,
+			String oauthAccessToken, String oauthAccessTokenSecret, String oauthConsumerKey, String oauthConsumerKeySecret) {		
+		LatLong boundingBoxNW = new LatLong(NWlat, NWlong);
+		LatLong boundingBoxSE = new LatLong(SElat, SElong);
 		
-		GeoParams geoParams = new GeoParams(request.resolutionX, request.resolutionY, boundingBoxNW, boundingBoxSE);
+		GeoParams geoParams = new GeoParams(resolutionX, resolutionY, boundingBoxNW, boundingBoxSE);
 		AuthFields authFields = new AuthFields(
-				request.oauthAccessToken, 
-				request.oauthAccessTokenSecret, 
-				request.oauthConsumerKey, 
-				request.oauthConsumerKeySecret);
-		WrapperParams wrapperParams = new WrapperParams(request.source, request.theme);
+				oauthAccessToken, 
+				oauthAccessTokenSecret, 
+				oauthConsumerKey, 
+				oauthConsumerKeySecret);
+		WrapperParams wrapperParams = new WrapperParams(source, theme);
 		
-		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
+		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(wrapperType);
 		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
 		
-		PointStream ps = new PointStream(tw, request.pointPollingTimeMS);
+		PointStream ps = new PointStream(tw, pointPollingTimeMS);
 		
-		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(request.operatorType));
-		EmageStream es = new EmageStream(eb, request.emageCreationRateMS, request.emageWindowLength);
+		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(operatorType));
+		EmageStream es = new EmageStream(eb, emageCreationTimeMS, emageWindowLength);
 		
 		//Add the pipeline to our collection by it's index so we can reaccess it
 		final DataPipeline p = new DataPipeline(ps, es);
@@ -135,6 +139,55 @@ public class StreamHandler {
 		pointThread.start();
 		emageThread.start();
 		
+		currentPipelineCount++;
+		
+		return p.pipelineID;
+	}
+	
+	public int buildAndStartNewPipelineFromGson(GsonNewPipelineRequest request) {		
+		LatLong boundingBoxNW = new LatLong(request.NWlat, request.NWlong);
+		LatLong boundingBoxSE = new LatLong(request.SElat, request.SElong);
+
+		GeoParams geoParams = new GeoParams(request.resolutionX, request.resolutionY, boundingBoxNW, boundingBoxSE);
+		AuthFields authFields = new AuthFields(
+				request.oauthAccessToken, 
+				request.oauthAccessTokenSecret, 
+				request.oauthConsumerKey, 
+				request.oauthConsumerKeySecret);
+		WrapperParams wrapperParams = new WrapperParams(request.source, request.theme);
+
+		WrapperFactory.WrapperType type = WrapperFactory.WrapperType.valueOf(request.wrapperType);
+		AbstractDataWrapper tw = WrapperFactory.getWrapperInstance(type, wrapperParams, authFields, geoParams);
+
+		PointStream ps = new PointStream(tw, request.pointPollingTimeMS);
+
+		EmageBuilder eb = new EmageBuilder(ps, EmageBuilder.Operator.valueOf(request.operatorType));
+		EmageStream es = new EmageStream(eb, request.emageCreationRateMS, request.emageWindowLength);
+
+		//Add the pipeline to our collection by it's index so we can reaccess it
+		final DataPipeline p = new DataPipeline(ps, es);
+		this.dataPipelines.put(p.pipelineID, p);
+
+		//Create the threads and Start the streams
+		Thread pointThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					p.pointStream.getNextPoint();
+				}
+			} 	
+		});	
+		Thread emageThread = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
+					System.out.println(p.emageStream.getNextEmage());
+				}
+			}
+		});
+		pointThread.start();
+		emageThread.start();
+
 		return p.pipelineID;
 	}
 }

@@ -17,9 +17,9 @@ public class LatLong {
 	 */
 	public LatLong(double latitude, double longitude) {
 		if (latitude > 90 || latitude < -90) {
-			throw new IllegalArgumentException("Latitude outside of acceptable values (-90<x<90)");
+			throw new IllegalArgumentException("Latitude:" + latitude +", is outside of acceptable values (-90<x<90)");
 		} else if (longitude < -180 || longitude > 180) {
-			throw new IllegalArgumentException("Longitude outside of acceptable values (-180<x<180)");
+			throw new IllegalArgumentException("Longitude :" + longitude +", is outside of acceptable values (-180<x<180)");
 		}
 		this.latitude = latitude;
 		this.longitude = longitude;
