@@ -120,7 +120,7 @@ public class StreamHandler {
 			@Override
 			public void run() {
 				while (true) {
-					System.out.println(p.pointStream.getNextPoint());
+					p.pointStream.getNextPoint();
 				}
 			} 	
 		});	

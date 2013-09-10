@@ -43,7 +43,7 @@ public class EmageBuilder {
 		
 		this.pointQueue.addAll(this.pointStream.getAndClearNewPointsQueue());		
 		Iterator<STTPoint> pointIterator = this.pointQueue.iterator();
-		
+				
 		GeoParams geoParams = this.pointStream.getGeoParams();
 		
 		//Initialize grid to correct values
@@ -54,9 +54,11 @@ public class EmageBuilder {
 		
 		while (pointIterator.hasNext()) {
 			STTPoint currPoint = pointIterator.next();
-			
+						
 			int x = getXIndex(geoParams, currPoint);
 			int y = getYIndex(geoParams, currPoint);
+			
+			System.out.println("x: "+x+" y: "+y);
 			
 			if (x>=0 && y >=0) {
 				switch (this.operator) {
@@ -148,10 +150,10 @@ public class EmageBuilder {
 	 * @return index of the point in the grid, or -1 if it is outside of the grid
 	 */
 	private int getYIndex(GeoParams geoParams, STTPoint sttPoint) {
-		boolean insideBox = sttPoint.getLatLong().latitude > geoParams.geoBoundNW.latitude ||
-				sttPoint.getLatLong().latitude < geoParams.geoBoundSE.latitude;
+		boolean outsideBox = (sttPoint.getLatLong().latitude > geoParams.geoBoundNW.latitude) ||
+				(sttPoint.getLatLong().latitude < geoParams.geoBoundSE.latitude);
 		
-		if (!insideBox) return -1;
+		if (outsideBox) return -1;
 		
 		double delta_y = Math.abs(geoParams.geoBoundNW.latitude - sttPoint.getLatLong().latitude);
 		return (int) Math.round(delta_y/geoParams.geoResolutionY);

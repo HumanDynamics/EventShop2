@@ -17,9 +17,9 @@ public class WrapperFactory {
 			case CSV:
 				wrapper = new CSVWrapper(wrapperParams, authFields, geoParams);
 				break;
-			case DATABASE:
-				wrapper = new DBWrapper(wrapperParams, authFields, geoParams);
-				break;
+//			case DATABASE:
+//				wrapper = new DBWrapper(wrapperParams, authFields, geoParams);
+//				break;
 			case PERSONALDATA:
 				//TODO: add personalDataWrapper here
 				break;

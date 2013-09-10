@@ -26,26 +26,32 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 		super(wrapperParams, authFields, geoParams);
 		pointList = new ArrayList<STTPoint>();
         FilterQuery query= new FilterQuery();
-        query.track(new String[]{wrapperParams.getTheme()});
-        //query.locations(locations);
+        //query.track(new String[]{wrapperParams.getTheme()});
+        String[] themes = {"obama"};
+        query.track(themes);
+        
+        
+        double[][] locations = {{-179.99, -89.99}, {179.99, 89.99}};
+        query.locations(locations);
         TwitterStream twitterStream= new TwitterStreamFactory().getInstance();
-        twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));
-        //twitterStream.setOAuthConsumer("HbzFVHFA5NGqcXgGfn2w", "VPtqjXE0WQeQI0ao0FFMhR3wshaD8rLIZN3bfPGslE"); //hardcoded (this is my Twitter that I never use(d))
-        twitterStream.setOAuthConsumer(authFields.getConsumerKey(),authFields.getConsumerKeySecret());
-        //twitterStream.setOAuthAccessToken(new AccessToken("24302602-Fuukj26lTLqQcAASJyQa3MlgrcXhml0J6eGHSFOPx", "vwlI15Hx1rfz5GHLLh7OQhjGS8eKxK8jclezN8vXoo")); //hardcoded (this is my Twitter that I never use(d))
+        //twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));
+        twitterStream.setOAuthConsumer("HbzFVHFA5NGqcXgGfn2w", "VPtqjXE0WQeQI0ao0FFMhR3wshaD8rLIZN3bfPGslE"); //hardcoded (this is my Twitter that I never use(d))
+        //twitterStream.setOAuthConsumer(authFields.getConsumerKey(),authFields.getConsumerKeySecret());
+        twitterStream.setOAuthAccessToken(new AccessToken("24302602-Fuukj26lTLqQcAASJyQa3MlgrcXhml0J6eGHSFOPx", "vwlI15Hx1rfz5GHLLh7OQhjGS8eKxK8jclezN8vXoo")); //hardcoded (this is my Twitter that I never use(d))
         StatusListener listener = new StatusListener() {
             @Override
             public void onStatus(Status status) {
                 //System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 GeoLocation tweetLocation=status.getGeoLocation();
                 if (tweetLocation==null){
-                    Place place = status.getPlace();
-                    GeoLocation[][] bounds = place.getBoundingBoxCoordinates();
-                    GeoLocation oneCorner = bounds[0][0];
-                    GeoLocation anotherCorner = bounds[0][2];
-                    double averageLat = (oneCorner.getLatitude()+anotherCorner.getLatitude())/2;
-                    double averageLong = (oneCorner.getLongitude()+anotherCorner.getLongitude())/2;
-                    tweetLocation = new GeoLocation(averageLat,averageLong);
+                	return;
+//                    Place place = status.getPlace();
+//                    GeoLocation[][] bounds = place.getBoundingBoxCoordinates();
+//                    GeoLocation oneCorner = bounds[0][0];
+//                    GeoLocation anotherCorner = bounds[0][2];
+//                    double averageLat = (oneCorner.getLatitude()+anotherCorner.getLatitude())/2;
+//                    double averageLong = (oneCorner.getLongitude()+anotherCorner.getLongitude())/2;
+//                    tweetLocation = new GeoLocation(averageLat,averageLong);
                 }
                 double latitude = tweetLocation.getLatitude();
                 double longitude = tweetLocation.getLongitude();
