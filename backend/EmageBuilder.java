@@ -57,9 +57,7 @@ public class EmageBuilder {
 						
 			int x = getXIndex(geoParams, currPoint);
 			int y = getYIndex(geoParams, currPoint);
-			
-			System.out.println("x: "+x+" y: "+y);
-			
+						
 			if (x>=0 && y >=0) {
 				switch (this.operator) {
 				case MAX:
@@ -72,6 +70,9 @@ public class EmageBuilder {
 					valueGrid[x][y] += currPoint.getValue();
 					break;
 				case COUNT:
+					System.out.println("x: "+x+", y: "+y);
+					System.out.println("x size: " + valueGrid.length + "y size: "+ valueGrid[0].length);
+					System.out.println(currPoint);
 					valueGrid[x][y]++;
 					break;
 				case AVG:
@@ -129,7 +130,7 @@ public class EmageBuilder {
 				geoParams.geoBoundNW.longitude > sttPoint.getLatLong().longitude) {
 			//Our point is wrapped around 180/-180
 			if (geoParams.geoBoundSE.longitude > sttPoint.getLatLong().longitude) {
-				delta_x =  (180 - geoParams.geoBoundNW.longitude) + (180 + sttPoint.getLatLong().longitude);
+				delta_x =  360 - geoParams.geoBoundNW.longitude + sttPoint.getLatLong().longitude;
 			} else {
 				//Outside of the bounding box
 				return -1;
@@ -140,10 +141,10 @@ public class EmageBuilder {
 				//Outside of the bounding box
 				return -1;
 			} else {
-			delta_x = Math.abs(geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude);
+			delta_x = geoParams.geoBoundNW.longitude - sttPoint.getLatLong().longitude;
 			}
 		}
-		return (int) Math.round(delta_x/geoParams.geoResolutionX);
+		return (int) Math.round(Math.abs((delta_x/geoParams.geoResolutionX) +.5));
 	}
 
 	/**

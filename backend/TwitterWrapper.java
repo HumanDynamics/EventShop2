@@ -26,12 +26,11 @@ public class TwitterWrapper extends AbstractGeoWrapper {
 		super(wrapperParams, authFields, geoParams);
 		pointList = new ArrayList<STTPoint>();
         FilterQuery query= new FilterQuery();
-        //query.track(new String[]{wrapperParams.getTheme()});
-        String[] themes = {"obama"};
-        query.track(themes);
+        query.track(new String[]{wrapperParams.getTheme()});
         
-        
-        double[][] locations = {{-179.99, -89.99}, {179.99, 89.99}};
+        double[][] locations = {{geoParams.geoBoundNW.longitude, geoParams.geoBoundSE.latitude}, 
+        		{geoParams.geoBoundSE.longitude, geoParams.geoBoundNW.latitude}};
+//        double[][] locations = {{-180, -90}, {180, 90}};
         query.locations(locations);
         TwitterStream twitterStream= new TwitterStreamFactory().getInstance();
         //twitterStream.setOAuthAccessToken(new AccessToken(authFields.getAccessToken(),authFields.getAccessTokenSecret()));

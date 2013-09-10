@@ -11,7 +11,7 @@ public class TestMain {
 				+ "'resolutionX':'60',"
 				+ "'resolutionY':'30',"
 				+ "'source':'source',"
-				+ "'theme':'theme',"
+				+ "'theme':'obama',"
 				+ "'wrapperType':'TWITTER',"
 				+ "'operatorType':'COUNT',"
 				+ "'pointPollingRateMS':'500',"
@@ -27,6 +27,6 @@ public class TestMain {
 	}
 }
 
-//curl --data 'NWlat=3&NWlong=-3&SElat=-3&SElong=3&resolutionX=1&resolutionY=1&source=source&theme=theme&wrapperType=TWITTER&operatorType=COUNT&pointPollingRateMS=500&emageCreationRateMS=7000&emageWindowLength=0' localhost:8080/myapp/myresource
+//curl --data 'NWlat=89.99&NWlong=-179.99&SElat=-89.99&SElong=179.99&resolutionX=60&resolutionY=30&source=source&theme=obama&wrapperType=TWITTER&operatorType=COUNT&pointPollingRateMS=500&emageCreationRateMS=7000&emageWindowLength=0' localhost:8080/myapp/myresource
 
 
